@@ -1,0 +1,223 @@
+extends ../layouts/default
+
+block main
+
+block content
+  div#folder-tree
+    div.folders-container
+  div.editor-menu#menu-toggle(style='')
+    a.toggle-button.transition#menu-toggle-button
+      i.icon-align-justify
+      div.menu#menu-content
+        #optionsPanel(style='height: 100%; width: 260px;color:#fff;')
+          div()
+            div.table-wrapper(style='width: 120%; overflow-y: scroll;padding-top:4px;')
+              table#controls
+                tr
+                  td
+                    label(for='doc') Document
+                  td
+                    select#doc(size='1')
+                tr
+                  td
+                    label(for='mode') Mode
+                  td
+                    select#mode(size='1')
+                tr
+                  td
+                    label(for='split') Split
+                  td
+                    select#split(size='1')
+                      option(value='none') None
+                      option(value='below') Below
+                      option(value='beside') Beside
+                tr
+                  td
+                    label(for='theme') Theme
+                  td
+                    select#theme(size='1')
+                      optgroup(label='Bright')
+                        option(value='ace/theme/chrome') Chrome
+                        option(value='ace/theme/clouds') Clouds
+                        option(value='ace/theme/crimson_editor') Crimson Editor
+                        option(value='ace/theme/dawn') Dawn
+                        option(value='ace/theme/dreamweaver') Dreamweaver
+                        option(value='ace/theme/eclipse') Eclipse
+                        option(value='ace/theme/github') GitHub
+                        option(value='ace/theme/solarized_light') Solarized Light
+                        option(value='ace/theme/textmate', selected='selected') TextMate
+                        option(value='ace/theme/tomorrow') Tomorrow
+                        option(value='ace/theme/xcode') XCode
+                      optgroup(label='Dark')
+                        option(value='ace/theme/ambiance') Ambiance
+                        option(value='ace/theme/chaos') Chaos
+                        option(value='ace/theme/clouds_midnight') Clouds Midnight
+                        option(value='ace/theme/cobalt') Cobalt
+                        option(value='ace/theme/idle_fingers') idleFingers
+                        option(value='ace/theme/kr_theme') krTheme
+                        option(value='ace/theme/merbivore') Merbivore
+                        option(value='ace/theme/merbivore_soft') Merbivore Soft
+                        option(value='ace/theme/mono_industrial') Mono Industrial
+                        option(value='ace/theme/monokai') Monokai
+                        option(value='ace/theme/pastel_on_dark') Pastel on dark
+                        option(value='ace/theme/solarized_dark') Solarized Dark
+                        option(value='ace/theme/terminal') Terminal
+                        option(value='ace/theme/tomorrow_night') Tomorrow Night
+                        option(value='ace/theme/tomorrow_night_blue') Tomorrow Night Blue
+                        option(value='ace/theme/tomorrow_night_bright') Tomorrow Night Bright
+                        option(value='ace/theme/tomorrow_night_eighties') Tomorrow Night 80s
+                        option(value='ace/theme/twilight') Twilight
+                        option(value='ace/theme/vibrant_ink') Vibrant Ink
+                tr
+                  td
+                    label(for='fontsize') Font Size
+                  td
+                    select#fontsize(size='1')
+                      option(value='10px') 10px
+                      option(value='11px') 11px
+                      option(value='12px', selected='selected') 12px
+                      option(value='13px') 13px
+                      option(value='14px') 14px
+                      option(value='16px') 16px
+                      option(value='18px') 18px
+                      option(value='20px') 20px
+                      option(value='24px') 24px
+                tr
+                  td
+                    label(for='folding') Code Folding
+                  td
+                    select#folding(size='1')
+                      option(value='manual') manual
+                      option(value='markbegin', selected='selected') mark begin
+                      option(value='markbeginend') mark begin and end
+                tr
+                  td
+                    label(for='keybinding') Key Binding
+                  td
+                    select#keybinding(size='1')
+                      option(value='ace') Ace
+                      option(value='vim') Vim
+                      option(value='emacs') Emacs
+                      option(value='custom') Custom
+                tr
+                  td
+                    label(for='soft_wrap') Soft Wrap
+                  td
+                    select#soft_wrap(size='1')
+                      option(value='off') Off
+                      option(value='40') 40 Chars
+                      option(value='80') 80 Chars
+                      option(value='free') Free
+                tr
+                  td(colspan='2')
+                    table#more-controls
+                      tr
+                        td
+                          label(for='select_style') Full Line Selection
+                        td
+                          input#select_style(type='checkbox', name='select_style', checked='checked')
+                      tr
+                        td
+                          label(for='highlight_active') Highlight Active Line
+                        td
+                          input#highlight_active(type='checkbox', name='highlight_active', checked='checked')
+                      tr
+                        td
+                          label(for='show_hidden') Show Invisibles
+                        td
+                          input#show_hidden(type='checkbox', name='show_hidden', checked='checked')
+                      tr
+                        td
+                          label(for='display_indent_guides') Show Indent Guides
+                        td
+                          input#display_indent_guides(type='checkbox', name='display_indent_guides', checked='checked')
+                      tr
+                        td
+                          label(for='show_hscroll') Persistent HScroll
+                        td
+                          input#show_hscroll(type='checkbox', name='show_hscroll')
+                      tr
+                        td
+                          label(for='animate_scroll') Animate scrolling
+                        td
+                          input#animate_scroll(type='checkbox', name='animate_scroll')
+                      tr
+                        td
+                          label(for='show_gutter') Show Gutter
+                        td
+                          input#show_gutter(type='checkbox', checked='checked')
+                      tr
+                        td
+                          label(for='show_print_margin') Show Print Margin
+                        td
+                          input#show_print_margin(type='checkbox', checked='checked')
+                      tr
+                        td
+                          label(for='soft_tab') Use Soft Tab
+                        td
+                          input#soft_tab(type='checkbox', checked='checked')
+                      tr
+                        td
+                          label(for='highlight_selected_word') Highlight selected word
+                        td
+                          input#highlight_selected_word(type='checkbox', checked='checked')
+                      tr
+                        td
+                          label(for='enable_behaviours') Enable Behaviours
+                        td
+                          input#enable_behaviours(type='checkbox')
+                      tr
+                        td
+                          label(for='fade_fold_widgets') Fade Fold Widgets
+                        td
+                          input#fade_fold_widgets(type='checkbox')
+                      tr
+                        td
+                          label(for='elastic_tabstops') Enable Elastic Tabstops
+                        td
+                          input#elastic_tabstops(type='checkbox')
+                      tr
+                        td
+                          label(for='isearch') Incremental Search
+                        td
+                          input#isearch(type='checkbox')
+                      tr
+                        td
+                          label(for='highlight_token') Show token info
+                        td
+                          input#highlight_token(type='checkbox')
+                      tr
+                        td
+                          label(for='read_only') Read-only
+                        td
+                          input#read_only(type='checkbox')
+                      tr
+                        td(colspan='2')
+                          input(type='button', value='Edit Snippets', onclick='env.editSnippets()')
+  #editors
+    #editor-container
+      ul#editor-tabs
+
+  //
+    DEVEL
+  script(type='text/javascript').
+    var require = {
+    baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
+    paths: {
+      jquery: "js/vendor/jquery.min",
+      underscore: "js/vendor/underscore-min",
+      backbone: "js/vendor/backbone-min",
+      ace: "js/lib/ace"
+    },
+    shim: {
+      'underscore': {
+        exports: "_"
+      },
+      'backbone': {
+        deps: ['underscore', 'jquery'],
+        exports: 'Backbone'
+      }
+    },
+    waitSeconds: 30
+    };
+  script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')
