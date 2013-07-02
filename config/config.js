@@ -3,17 +3,15 @@ var path = require('path')
 
 module.exports = {
   development: {
-    db: 'mongodb://admin:pass@dharma.mongohq.com:10081/kiks',
     root: rootPath,
     app: {
-      name: 'Nodejs Express Mongoose Demo'
+      name: 'Noditor -- ACE editor with SFTP'
     }
   },
   test: {
-    db: 'mongodb://admin:pass@dharma.mongohq.com:10081/kiks',
     root: rootPath,
     app: {
-      name: 'Nodejs Express Mongoose Demo'
+      name: 'Noditor -- ACE editor with SFTP'
     }
   },
   production: {}
