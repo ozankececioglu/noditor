@@ -4,7 +4,6 @@ define([
   'backbone'
 ], function($, _, Backbone) {
 
-  console.log("eee", $, _, Backbone);
   var FileTreeView = Backbone.View.extend({
 
       el: "#folder-tree",
@@ -191,7 +190,6 @@ define([
                     fileName: fileName
                 },
                 success: function(r){
-                    console.log("eeee", r);
                     env.editor.session.doc.setValue(r);
 
                     var mode = modelist.getModeForPath(fileName);
@@ -200,15 +198,19 @@ define([
 
                     env.editor.session.setMode(mode.mode);
                     env.editor.session.modeName = mode.name;
+
+                    $("#editor-tabs li").removeClass("active");
                     //add to tabs if not exist
                     if($("li#"+$(e.target).attr("id")+"-tab").length === 0) {
                       
                       var li = $('<li data-file-name="'+fileName+'"'+
-                        'class="tab-link" id"' + $(e.target).attr("id") + '-tabs">' + $(e.target).html()+
+                        'class="tab-link active" id"' + $(e.target).attr("id") + '-tabs">' + $(e.target).html()+
                         '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
                         '</li>');
 
                       li.click(function(e){
+                        $("#editor-tabs li").removeClass("active");
+                        $(e.target).addClass("active");
                         var fileName = $(e.target).attr("data-file-name");
                         env.editor.session.doc.setValue(self.fileTreeMap[fileName].value);
 

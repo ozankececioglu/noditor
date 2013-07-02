@@ -102,6 +102,9 @@ exports.start = function(req, res) {
       port: 22,
       username: username,
       password: password
+      // hostVerifier: function(){
+      //   return true;
+      // }
     });
 
     var started=0, finished=0, running=0;
@@ -170,8 +173,6 @@ exports.start = function(req, res) {
                                 }));
 
                                 res.end();
-                                console.log(treeRootObject);
-                                console.log("hurraaaay job is done sir");
                               }
                               return folderName;
                           }
@@ -196,9 +197,24 @@ exports.readFile = function(req, res){
   var rs = sftpConnection.createReadStream(fileName);
   console.log(rs);
   rs.pipe(res);
-  // res.write(JSON.stringify({
-  //     success: true
-  // }));
-
-  //res.end();  
 }
+
+exports.writeFile = function(req, res){
+  var fileContent = req.param("content");
+  var fileName = req.param("name");
+
+  console.log(fileContent);
+
+  //sftpConnection.fastPut("../../tmp/text-x.js", "/home/diki/nodes/noditor/test-x.js", function);
+  var ws = sftpConnection.createWriteStream(fileName, {autoClose: false});
+
+  ws.write(fileContent, 'utf8', function(){
+    console.log("written!!!!!");
+    res.write(JSON.stringify({
+        success: true
+    }));
+
+    res.end();  
+  });
+}
+

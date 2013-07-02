@@ -10,6 +10,12 @@ define(function(require, exports, module) {
     var env = {};
 
     var $ = require("jquery");
+    //set sftp parameters from cookie
+    $("#username").val(readCookie("username"));
+    $("#password").val(readCookie("password"));
+    $("#directory").val(readCookie("directory"));
+    $("#host").val(readCookie("host"));
+
     var boot = require("bootstrap");
 
     var dom = require("ace/lib/dom");
@@ -178,7 +184,37 @@ define(function(require, exports, module) {
     commands.addCommand({
         name: "save",
         bindKey: {win: "Ctrl-S", mac: "Command-S"},
-        exec: function() {alert("Fake Save File");}
+        exec: function() {
+            var fileName = $("li.active").attr("data-file-name");
+            if(typeof fileName === "undefined") {
+                return;
+            }
+            var text = "Saving file " + fileName
+            var writeInterval = setInterval(function(){
+                text = text + "."
+                env.editor.cmdLine.setValue(text);
+            }, 30) 
+            //alert("Fake Save File");
+            $.ajax({
+                type: "POST",
+                data: {
+                  content: env.editor.session.getValue(),
+                  name: $("li.active").attr("data-file-name"),
+                },
+                dataType: "json",
+                url: "/sftp/write",
+
+                success: function(resp){
+                    clearInterval(writeInterval);
+                    if(resp.success){
+                        env.editor.cmdLine.setValue(fileName + " successfully saved");
+                    }
+                    // var FileTreeView = require("js/views/FileTreeView");
+                    // var tv = new FileTreeView(resp.tree);
+                    // $("#myModal").modal("hide");
+                }
+            });            
+        }
     });
 
     var keybindings = {
@@ -227,6 +263,11 @@ define(function(require, exports, module) {
                 url: "/sftp",
 
                 success: function(resp){
+                    createCookie("username", $("#username").val(), 2);
+                    createCookie("password", $("#password").val(), 2);
+                    createCookie("directory", $("#directory").val(), 2);
+                    createCookie("host", $("#host").val(), 2);
+
                     var FileTreeView = require("js/views/FileTreeView");
                     var tv = new FileTreeView(resp.tree);
                     $("#myModal").modal("hide");
@@ -571,5 +612,25 @@ define(function(require, exports, module) {
         if (!success)
             editor.execCommand("indent");
     })
+
+    function createCookie(name,value,days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else var expires = "";
+        document.cookie = name+"="+value+expires+"; path=/";
+    }
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
 
 });

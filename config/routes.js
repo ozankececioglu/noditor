@@ -9,5 +9,6 @@ module.exports = function (app, passport, auth) {
   app.post('/sftp', sftp.start);
   app.post('/sftp/read', sftp.readFile);
   app.post('/sftp/dir', sftp.readDir);
+  app.post('/sftp/write', sftp.writeFile);
 
 }
