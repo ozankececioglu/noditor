@@ -10,6 +10,7 @@ define(function(require, exports, module) {
     var env = {};
 
     var $ = require("jquery");
+    var boot = require("bootstrap");
 
     var dom = require("ace/lib/dom");
     var net = require("ace/lib/net");
@@ -213,24 +214,26 @@ define(function(require, exports, module) {
         editMenu.style.height = document.documentElement.clientHeight - consoleHeight + "px";
         cmdLine.resize();
 
-          var root = "/home/diki/nodes";
-          $.ajax({
-            type: "POST",
-            data: {
-              username: "diki",
-              password: "1qazx",
-              root: root,
-              host: "diki.io"
-            },
-            dataType: "json",
-            url: "/sftp",
+        $("#start-sftp").click(function(){
+            $.ajax({
+                type: "POST",
+                data: {
+                  username: $("#username").val(),
+                  password: $("#password").val(),
+                  root: $("#directory").val(),
+                  host: $("#host").val()
+                },
+                dataType: "json",
+                url: "/sftp",
 
-            success: function(resp){
-                var FileTreeView = require("js/views/FileTreeView");
-              var tv = new FileTreeView(resp.tree);File
-              //createFolderStructure(resp.tree, root, $("#folder-tree"), true);
-            }
-          });
+                success: function(resp){
+                    var FileTreeView = require("js/views/FileTreeView");
+                    var tv = new FileTreeView(resp.tree);
+                    $("#myModal").modal("hide");
+                }
+            });
+        });
+
     }
 
     //window.onresize = onResize;

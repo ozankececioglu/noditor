@@ -3,7 +3,22 @@ extends ../layouts/default
 block main
 
 block content
+ 
+  #myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+      h3#myModalLabel Modal header
+    .modal-body
+      input#username(type="text", placeholder="username")
+      input#password(type="text", placeholder="password")
+      input#host(type="text", placeholder="host")
+      input#directory(type="text", placeholder="directory")
+    .modal-footer
+      button.btn(data-dismiss='modal', aria-hidden='true') Close
+      button#start-sftp.btn.btn-primary Send
+
   div#folder-tree
+    a.btn(href='#myModal', role='button', data-toggle='modal') Connect to SFTP Server
     div.folders-container
   div.editor-menu#menu-toggle(style='')
     a.toggle-button.transition#menu-toggle-button
@@ -207,7 +222,8 @@ block content
       jquery: "js/vendor/jquery.min",
       underscore: "js/vendor/underscore-min",
       backbone: "js/vendor/backbone-min",
-      ace: "js/lib/ace"
+      ace: "js/lib/ace",
+      bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min'
     },
     shim: {
       'underscore': {
@@ -216,7 +232,8 @@ block content
       'backbone': {
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
-      }
+      },
+      'bootstrap' : ['jquery']
     },
     waitSeconds: 30
     };

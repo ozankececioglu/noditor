@@ -68,10 +68,6 @@ exports.start = function(req, res) {
     var username = req.param("username");
     var host = req.param("host");
 
-    //rootFolderName = "/home/diki/nodes/ace-passport-boilerplate";
-    password = "1qazx";
-    username = "diki";
-    host = "diki.io";
     c.on('ready', function() {
       console.log('Connection :: ready');
       //sftpConnection = c;

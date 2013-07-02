@@ -29,9 +29,7 @@ define([
       },
 
       render: function(){
-          // var self = this;
-          // this.index = 0;
-          // this.createFolderStructure(this.options, "root", this.$el, true, this);
+          this.$el.html("");
           var tr = '&#9660;';
           var rootNode = $('<div class="tree-node" style="padding-left:12px;">' +
             '<div class="name-info">' +
