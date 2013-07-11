@@ -150,6 +150,15 @@ overflow: hidden;
     width: 20%;
     overflow-y: auto;
     color: #ccc;
+    margin-top: 10px;
+}
+
+.file-name {
+    cursor: pointer;
+}
+
+.toggle-folder {
+    font-size: 10px;
 }
 
 .name-info:hover{
@@ -189,11 +198,13 @@ overflow: hidden;
     
     padding: 0 4px;
 
-    box-shadow: 1px 1px 4px #333;    
+    box-shadow: 1px 1px 4px #333;
+    line-height: 24px;
 }
 
 #editor-tabs li.active {
-    box-shadow: 1px 1px 4px #fff;    
+    /*box-shadow: 1px 1px 4px #fff;*/
+    background: #333;
 }
 
 
@@ -217,6 +228,14 @@ overflow: hidden;
     -moz-box-shadow: 0 2px 1px -1px rgba(0,0,0,0.07);
     box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.07);
     border-bottom: 1px solid #CCC;
+}
+
+.area-top > #settings {
+    color: black;
+    font-weight: bold;
+    margin-left: 1px;
+    padding: 2px 24px;
+    border: 1px solid #e5e5e5;
 }
 
 

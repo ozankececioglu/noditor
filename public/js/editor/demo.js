@@ -240,7 +240,7 @@ define(function(require, exports, module) {
         var left = env.split.$container.offsetLeft;
         var width = document.documentElement.clientWidth;
         //container.style.width = "100%";
-        container.style.height = document.documentElement.clientHeight - consoleHeight + 5 + "px";
+        container.style.height = document.documentElement.clientHeight - consoleHeight - 45 + "px";
         env.split.resize();
 
         console.log("window resize", width);

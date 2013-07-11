@@ -32,8 +32,8 @@ define([
           var tr = '&#9660;';
           var rootNode = $('<div class="tree-node" style="padding-left:12px;">' +
             '<div class="name-info">' +
-              '<span class="toggle-folder" data-fetched="1" data-location="'+this.options.name+'">'+tr+'</span>' +
-              '<span class="node-name">' + 'root' + '</span>' +
+              '<span class="toggle-folder" data-fetched="1" data-location="'+this.options.name+'">'+'</span>' +
+              '<span class="node-name" style="font-weight:bold;">' + 'FOLDERS' + '</span>' +
             '</div>' +
             '<div class="folders-container">'+
             '</div>' +
