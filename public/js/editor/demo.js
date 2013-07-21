@@ -17,6 +17,24 @@ define(function(require, exports, module) {
     $("#host").val(readCookie("host"));
 
     var boot = require("bootstrap");
+    var context = require("context");
+    context.init({
+        fadeSpeed: 100,
+        above: 'auto',
+        compress: false
+    });
+    context.attach('.node-name', [{
+        text: "New Folder"
+    }, {
+        text: "New File"
+    }, {
+        text: "Delete"
+    }]);  
+    context.attach('.file-name', [{
+        text: "Save"
+    }, {
+        text: "Delete"
+    }]);      
 
     var dom = require("ace/lib/dom");
     var net = require("ace/lib/net");
