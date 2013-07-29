@@ -20,24 +20,11 @@ block content
   div#folder-tree
     a.btn(href='#myModal', role='button', data-toggle='modal') Connect to SFTP Server
     div.folders-container
-  div.editor-menu#menu-toggle(style='')
-    a.toggle-button.transition#menu-toggle-button
-      i.icon-align-justify
+  div.editor-menu#menu-toggle(style='display:none;')
       div.menu#menu-content
-        #optionsPanel(style='height: 100%; width: 260px;color:#fff;')
+        #optionsPanel(style='height: 100%; background:#fff;')
           div()
-            div.table-wrapper(style='width: 120%; overflow-y: scroll;padding-top:4px;')
               table#controls
-                tr
-                  td
-                    label(for='doc') Document
-                  td
-                    select#doc(size='1')
-                tr
-                  td
-                    label(for='mode') Mode
-                  td
-                    select#mode(size='1')
                 tr
                   td
                     label(for='split') Split

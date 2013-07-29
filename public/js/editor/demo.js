@@ -15,8 +15,13 @@ define(function(require, exports, module) {
     $("#password").val(readCookie("password"));
     $("#directory").val(readCookie("directory"));
     $("#host").val(readCookie("host"));
-
+    //click event for settings
+    $("#settings").click(function() {
+        $("#menu-toggle").toggle();
+    })
     var boot = require("bootstrap");
+
+    //context menu for fileTreeView
     var context = require("context");
     context.init({
         fadeSpeed: 100,
@@ -41,7 +46,6 @@ define(function(require, exports, module) {
     var lang = require("ace/lib/lang");
     var useragent = require("ace/lib/useragent");
 
-    var event = require("ace/lib/event");
     var theme = require("ace/theme/textmate");
     var EditSession = require("ace/edit_session").EditSession;
     var UndoManager = require("ace/undomanager").UndoManager;
@@ -51,7 +55,8 @@ define(function(require, exports, module) {
     var Renderer = require("ace/virtual_renderer").VirtualRenderer;
     var Editor = require("ace/editor").Editor;
     var MultiSelect = require("ace/multi_select").MultiSelect;
-
+    console.log("dom", dom, "renderer", Renderer);
+    
     var whitespace = require("ace/ext/whitespace");
 
     var doclist = require("./doclist");
@@ -96,7 +101,8 @@ define(function(require, exports, module) {
     console.log($);
     // add multiple cursor support to editor
     require("ace/multi_select").MultiSelect(env.editor);
-
+    env.editor.session.setUndoManager(new UndoManager);
+    
     var consoleEl = dom.createElement("div");
     container.parentNode.appendChild(consoleEl);
     consoleEl.style.cssText = "position:fixed; bottom:1px; right:0;\
@@ -149,17 +155,19 @@ define(function(require, exports, module) {
         bindKey: "shift-esc|ctrl-`",
         exec: function(editor, needle) { editor.cmdLine.focus(); },
         readOnly: true
-    }, {
-        name: "nextFile",
-        bindKey: "Ctrl-tab",
-        exec: function(editor) { doclist.cycleOpen(editor, 1); },
-        readOnly: true
-    }, {
-        name: "previousFile",
-        bindKey: "Ctrl-shift-tab",
-        exec: function(editor) { doclist.cycleOpen(editor, -1); },
-        readOnly: true
-    }, {
+    }
+    // , {
+    //     name: "nextFile",
+    //     bindKey: "Ctrl-tab",
+    //     exec: function(editor) { doclist.cycleOpen(editor, 1); },
+    //     readOnly: true
+    // }, {
+    //     name: "previousFile",
+    //     bindKey: "Ctrl-shift-tab",
+    //     exec: function(editor) { doclist.cycleOpen(editor, -1); },
+    //     readOnly: true
+    // }
+    , {
         name: "execute",
         bindKey: "ctrl+enter",
         exec: function(editor) {
@@ -300,7 +308,7 @@ define(function(require, exports, module) {
 
     /*********** options panel ***************************/
     var docEl = document.getElementById("doc");
-    var modeEl = document.getElementById("mode");
+    //var modeEl = document.getElementById("mode");
     var wrapModeEl = document.getElementById("soft_wrap");
     var themeEl = document.getElementById("theme");
     var foldingEl = document.getElementById("folding");
@@ -315,14 +323,14 @@ define(function(require, exports, module) {
     var softTabEl = document.getElementById("soft_tab");
     var behavioursEl = document.getElementById("enable_behaviours");
 
-    fillDropdown(docEl, doclist.all);
+    //fillDropdown(docEl, doclist.all);
 
-    fillDropdown(modeEl, modelist.modes);
-    var modesByName = modelist.modesByName;
-    bindDropdown("mode", function(value) {
-        env.editor.session.setMode(modesByName[value].mode || modesByName.text.mode);
-        env.editor.session.modeName = value;
-    });
+    //fillDropdown(modeEl, modelist.modes);
+    //var modesByName = modelist.modesByName;
+    // bindDropdown("mode", function(value) {
+    //     env.editor.session.setMode(modesByName[value].mode || modesByName.text.mode);
+    //     env.editor.session.modeName = value;
+    // });
 
     doclist.history = doclist.docs.map(function(doc) {
         return doc.name;
@@ -352,17 +360,17 @@ define(function(require, exports, module) {
         }
     }
 
-    bindDropdown("doc", function(name) {
-        doclist.loadDoc(name, function(session) {
-            if (!session)
-                return;
-            doclist.addToHistory(session.name);
-            session = env.split.setSession(session);
-            whitespace.detectIndentation(session);
-            updateUIEditorOptions();
-            env.editor.focus();
-        });
-    });
+    // bindDropdown("doc", function(name) {
+    //     doclist.loadDoc(name, function(session) {
+    //         if (!session)
+    //             return;
+    //         doclist.addToHistory(session.name);
+    //         session = env.split.setSession(session);
+    //         whitespace.detectIndentation(session);
+    //         updateUIEditorOptions();
+    //         env.editor.focus();
+    //     });
+    // });
 
 
     function updateUIEditorOptions() {
@@ -371,8 +379,8 @@ define(function(require, exports, module) {
 
         session.setFoldStyle(foldingEl.value);
 
-        saveOption(docEl, session.name);
-        saveOption(modeEl, session.modeName || "text");
+        // saveOption(docEl, session.name);
+        // saveOption(modeEl, session.modeName || "text");
         saveOption(wrapModeEl, session.getUseWrapMode() ? session.getWrapLimitRange().min || "free" : "off");
 
         saveOption(selectStyleEl, editor.getSelectionStyle() == "line");
@@ -388,17 +396,17 @@ define(function(require, exports, module) {
         saveOption(behavioursEl, editor.getBehavioursEnabled());
     }
 
-    event.addListener(themeEl, "mouseover", function(e){
-        this.desiredValue = e.target.value;
-        if (!this.$timer)
-            this.$timer = setTimeout(this.updateTheme);
-    });
+    // event.addListener(themeEl, "mouseover", function(e){
+    //     this.desiredValue = e.target.value;
+    //     if (!this.$timer)
+    //         this.$timer = setTimeout(this.updateTheme);
+    // });
 
-    event.addListener(themeEl, "mouseout", function(e){
-        this.desiredValue = null;
-        if (!this.$timer)
-            this.$timer = setTimeout(this.updateTheme, 20);
-    });
+    // event.addListener(themeEl, "mouseout", function(e){
+    //     this.desiredValue = null;
+    //     if (!this.$timer)
+    //         this.$timer = setTimeout(this.updateTheme, 20);
+    // });
 
     themeEl.updateTheme = function(){
         env.split.setTheme(themeEl.desiredValue || themeEl.selectedValue);
@@ -548,33 +556,33 @@ define(function(require, exports, module) {
     });
 
     /************** dragover ***************************/
-    event.addListener(container, "dragover", function(e) {
-        var types = e.dataTransfer.types;
-        if (types && Array.prototype.indexOf.call(types, 'Files') !== -1)
-            return event.preventDefault(e);
-    });
+    // event.addListener(container, "dragover", function(e) {
+    //     var types = e.dataTransfer.types;
+    //     if (types && Array.prototype.indexOf.call(types, 'Files') !== -1)
+    //         return event.preventDefault(e);
+    // });
 
-    event.addListener(container, "drop", function(e) {
-        var file;
-        try {
-            file = e.dataTransfer.files[0];
-            if (window.FileReader) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    var mode = modelist.getModeForPath(file.name);
+    // event.addListener(container, "drop", function(e) {
+    //     var file;
+    //     try {
+    //         file = e.dataTransfer.files[0];
+    //         if (window.FileReader) {
+    //             var reader = new FileReader();
+    //             reader.onload = function() {
+    //                 var mode = modelist.getModeForPath(file.name);
 
-                    env.editor.session.doc.setValue(reader.result);
-                    modeEl.value = mode.name;
-                    env.editor.session.setMode(mode.mode);
-                    env.editor.session.modeName = mode.name;
-                };
-                reader.readAsText(file);
-            }
-            return event.preventDefault(e);
-        } catch(err) {
-            return event.stopEvent(e);
-        }
-    });
+    //                 env.editor.session.doc.setValue(reader.result);
+    //                 modeEl.value = mode.name;
+    //                 env.editor.session.setMode(mode.mode);
+    //                 env.editor.session.modeName = mode.name;
+    //             };
+    //             reader.readAsText(file);
+    //         }
+    //         return event.preventDefault(e);
+    //     } catch(err) {
+    //         return event.stopEvent(e);
+    //     }
+    // });
 
 
 
@@ -582,11 +590,11 @@ define(function(require, exports, module) {
     new StatusBar(env.editor, cmdLine.container);
 
 
-    var Emmet = require("ace/ext/emmet");
-    net.loadScript("https://rawgithub.com/nightwing/emmet-core/master/emmet.js", function() {
-        Emmet.setCore(window.emmet);
-        env.editor.setOption("enableEmmet", true);
-    })
+    // var Emmet = require("ace/ext/emmet");
+    // net.loadScript("https://rawgithub.com/nightwing/emmet-core/master/emmet.js", function() {
+    //     Emmet.setCore(window.emmet);
+    //     env.editor.setOption("enableEmmet", true);
+    // })
 
 
     require("ace/placeholder").PlaceHolder;
