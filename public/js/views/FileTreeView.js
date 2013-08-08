@@ -177,64 +177,71 @@ define([
 
       openFile: function(e){
 
-          var self = this;
-          var fileName = $(e.target).attr("data-location");
+        var self = this;
+        var fileName = $(e.target).attr('data-location');
 
-          if(self.fileTreeMap[fileName] === undefined){
-            self.fileTreeMap[fileName] = {};
-            $.ajax({
-                type: "POST",
-                url: "/sftp/read",
-                // dataType: "json",
-                data: {
-                    fileName: fileName
-                },
-                success: function(r){
-                    env.editor.session.doc.setValue(r);
+        window.app.FileTabs.trigger('add', {
+            id : $(e.target).attr('id')
+            , location : $(e.target).attr('data-location')
+            , name : $(e.target).html()
+        });
 
-                    var mode = modelist.getModeForPath(fileName);
-                    self.fileTreeMap[fileName].value = r;
-                    self.fileTreeMap[fileName].mode = mode;
+        // if(self.fileTreeMap[fileName] === undefined){
+        //     self.fileTreeMap[fileName] = {};
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/sftp/read",
+        //         // dataType: "json",
+        //         data: {
+        //             fileName: fileName
+        //         },
+        //         success: function(r){
 
-                    env.editor.session.setMode(mode.mode);
-                    env.editor.session.modeName = mode.name;
+        //             env.editor.session.doc.setValue(r);
 
-                    $("#editor-tabs li").removeClass("active");
-                    //add to tabs if not exist
-                    if($("li#"+$(e.target).attr("id")+"-tab").length === 0) {
+        //             var mode = modelist.getModeForPath(fileName);
+        //             self.fileTreeMap[fileName].value = r;
+        //             self.fileTreeMap[fileName].mode = mode;
+
+        //             env.editor.session.setMode(mode.mode);
+        //             env.editor.session.modeName = mode.name;
+
+        //             $("#editor-tabs li").removeClass("active");
+        //             //add to tabs if not exist
+        //             if($("li#"+$(e.target).attr("id")+"-tab").length === 0) {
                       
-                      var li = $('<li data-file-name="'+fileName+'"'+
-                        'class="tab-link active" id"' + $(e.target).attr("id") + '-tabs">' + $(e.target).html()+
-                        '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
-                        '</li>');
+        //               var li = $('<li data-file-name="'+fileName+'"'+
+        //                 'class="tab-link active" id"' + $(e.target).attr("id") + '-tabs">' + $(e.target).html()+
+        //                 '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
+        //                 '</li>');
 
-                      li.click(function(e){
-                        $("#editor-tabs li").removeClass("active");
-                        $(e.target).addClass("active");
-                        var fileName = $(e.target).attr("data-file-name");
-                        env.editor.session.doc.setValue(self.fileTreeMap[fileName].value);
+        //               li.click(function(e){
+        //                 $("#editor-tabs li").removeClass("active");
+        //                 $(e.target).addClass("active");
+        //                 var fileName = $(e.target).attr("data-file-name");
+        //                 env.editor.session.doc.setValue(self.fileTreeMap[fileName].value);
 
-                        var mode = self.fileTreeMap[fileName].mode;
-                        env.editor.session.setMode(mode.mode);
-                        env.editor.session.modeName = mode.name;                          
-                      });
+        //                 var mode = self.fileTreeMap[fileName].mode;
+        //                 env.editor.session.setMode(mode.mode);
+        //                 env.editor.session.modeName = mode.name;                          
+        //               });
 
-                      li.find("span").click(function(e){
-                        e.stopPropagation();
-                        $(e.target).parent().remove();
-                      });
-                      $("#editor-tabs").append(li)
-                    }
-                }
-            });
-          } else {
-            env.editor.session.doc.setValue(self.fileTreeMap[fileName].value);
+        //               li.find("span").click(function(e){
+        //                 e.stopPropagation();
+        //                 $(e.target).parent().remove();
+        //               });
+        //               $("#editor-tabs").append(li)
+        //             }
+        //         }
+        //     });
+        //   } else {
+        //     env.editor.session.doc.setValue(self.fileTreeMap[fileName].value);
 
-            var mode = self.fileTreeMap[fileName].mode;
-            env.editor.session.setMode(mode.mode);
-            env.editor.session.modeName = mode.name;            
+        //     var mode = self.fileTreeMap[fileName].mode;
+        //     env.editor.session.setMode(mode.mode);
+        //     env.editor.session.modeName = mode.name;            
 
-          }
+        //   }
       },
 
       updateEditorValue: function(e){

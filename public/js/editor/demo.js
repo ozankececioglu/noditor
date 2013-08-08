@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     var config = require("ace/config");
     config.init();
     var env = {};
+    var app = {};
 
     var $ = require("jquery");
     //set sftp parameters from cookie
@@ -40,11 +41,15 @@ define(function(require, exports, module) {
     }, {
         text: "Delete"
     }]);      
+    //file tabs view;
+    window.app = app;
+    var tabs = require('js/views/FileTabs');
+    window.app.FileTabs = new tabs({});
 
     var dom = require("ace/lib/dom");
-    var net = require("ace/lib/net");
-    var lang = require("ace/lib/lang");
-    var useragent = require("ace/lib/useragent");
+    // var net = require("ace/lib/net");
+    // var lang = require("ace/lib/lang");
+    // var useragent = require("ace/lib/useragent");
 
     var theme = require("ace/theme/textmate");
     var EditSession = require("ace/edit_session").EditSession;
@@ -98,7 +103,6 @@ define(function(require, exports, module) {
     window.ace = env.editor;
     //env.editor.setAnimatedScroll(true);
 
-    console.log($);
     // add multiple cursor support to editor
     require("ace/multi_select").MultiSelect(env.editor);
     env.editor.session.setUndoManager(new UndoManager);
@@ -338,7 +342,6 @@ define(function(require, exports, module) {
     doclist.history.index = 0;
     doclist.cycleOpen = function(editor, dir) {
 
-        conksol.log("doc list gslibs");
         var h = this.history
         h.index += dir;
         if (h.index >= h.length) 
