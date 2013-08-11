@@ -106,7 +106,10 @@ define(function(require, exports, module) {
     // add multiple cursor support to editor
     require("ace/multi_select").MultiSelect(env.editor);
     env.editor.session.setUndoManager(new UndoManager);
-    
+    //keep default session for later use
+    env.defaultSession = env.editor.session;
+    env.noFile = true;
+
     var consoleEl = dom.createElement("div");
     container.parentNode.appendChild(consoleEl);
     consoleEl.style.cssText = "position:fixed; bottom:1px; right:0;\
@@ -215,7 +218,8 @@ define(function(require, exports, module) {
         name: "save",
         bindKey: {win: "Ctrl-S", mac: "Command-S"},
         exec: function() {
-            var fileName = $("li.active").attr("data-file-name");
+            var id = $('li.active').attr('id').split('_')[0];
+            var fileName = window.app.FileTabs.openTabs.get(id).get('location');
             if(typeof fileName === "undefined") {
                 return;
             }
@@ -226,15 +230,14 @@ define(function(require, exports, module) {
             }, 30) 
             //alert("Fake Save File");
             $.ajax({
-                type: "POST",
-                data: {
-                  content: env.editor.session.getValue(),
-                  name: $("li.active").attr("data-file-name"),
-                },
-                dataType: "json",
-                url: "/sftp/write",
-
-                success: function(resp){
+                type: 'POST'
+                , data: {
+                  content: env.editor.session.getValue()
+                  , name: fileName
+                }
+                , dataType: 'json'
+                , url: '/sftp/write'
+                , success: function(resp){
                     clearInterval(writeInterval);
                     if(resp.success){
                         env.editor.cmdLine.setValue(fileName + " successfully saved");

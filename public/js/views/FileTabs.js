@@ -7,9 +7,11 @@ define([
     var FileTabs = Backbone.View.extend({
         el: '#editor-tabs'
         , events : {
-            'click .tab-link' : 'openTab'
+            'click .tab-link'       : 'openTab'
+            , 'click .close-tab'    : 'removeTab'
         }
         , initialize : function() {
+            _.bindAll(this, 'openTab', 'removeTab');
             this.openTabs = new (Backbone.Collection.extend({}))();
             this.openedFiles = new (Backbone.Collection.extend({}))();
             this.on('add', this.addTab, this);
@@ -21,6 +23,9 @@ define([
                 , location = fileModel.location
                 , self = this;
 
+            //flag indicating a file is opened
+            //note that this flag should be set to true at opening
+            env.noFile = false;
             //if it was not fetched already fetch file content and save it in 
             //openedFiles collection
             if(this.openedFiles.get(id) === undefined) {
@@ -87,7 +92,42 @@ define([
         , setActiveTab : function(fileId) {
             var session = this.openedFiles.get(fileId).get('session');
             window.env.editor.setSession(session);
+            this.focusSession();
+        }
+        //remove tab after click "x"
+        , removeTab : function (e) {
+            e.stopPropagation();
+            var self = this;
+            var id = $(e.target).parent().attr('id').split('_')[0];
+            if(id) {
+                var m = self.openTabs.get(id);
+                self.openTabs.remove(m);
+                //if it is active
+                if($(e.target).parent().hasClass('active')) {
+                    //if no tab remained
+                    if($('.tab-link', self.el).length <= 1) {
+                        window.env.editor.setSession(env.defaultSession);
+                        this.focusSession();
+                        env.noFile = true;
+                    } else {
+                        //set previous tab active if exist
+                        if($(e.target).parent().prev().length > 0) {
+                            var fid = $(e.target).parent().prev().attr('id').split('_')[0];
+                            $(e.target).parent().prev().addClass('active');
+                            self.setActiveTab(fid);
+                        } else if($(e.target).parent().next().length > 0) {
+                            var fid = $(e.target).parent().next().attr('id').split('_')[0];
+                            $(e.target).parent().next().addClass('active');
+                            self.setActiveTab(fid);                        
+                        }
+                    }
+                }
+                $(e.target).parent().remove();
+            }
+        }
+        , focusSession : function () {
             window.env.editor.focus();
+            var session = env.editor.session;
             count = session.getLength();
             window.env.editor.gotoLine(count, session.getLine(count-1).length);
         }
