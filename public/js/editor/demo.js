@@ -218,8 +218,10 @@ define(function(require, exports, module) {
         name: "save",
         bindKey: {win: "Ctrl-S", mac: "Command-S"},
         exec: function() {
-            var id = $('li.active').attr('id').split('_')[0];
-            var fileName = window.app.FileTabs.openTabs.get(id).get('location');
+            var id = $('li.active').attr('id').split('_')[0]
+                , content = env.editor.session.getValue()
+                , fileName = window.app.FileTabs.openTabs.get(id).get('location');
+
             if(typeof fileName === "undefined") {
                 return;
             }
@@ -228,11 +230,19 @@ define(function(require, exports, module) {
                 text = text + "."
                 env.editor.cmdLine.setValue(text);
             }, 30) 
-            //alert("Fake Save File");
+            //if there is no change don't save but show a fake save animation :)
+            var session = window.app.FileTabs.sessions.get(id);
+            if(session.get('value') === session.get('session').getValue()) {
+                setTimeout(function() {
+                    clearInterval(writeInterval);
+                    env.editor.cmdLine.setValue(fileName + " successfully saved");
+                }, 1500);
+                return;
+            }
             $.ajax({
                 type: 'POST'
                 , data: {
-                  content: env.editor.session.getValue()
+                  content: content
                   , name: fileName
                 }
                 , dataType: 'json'
@@ -242,9 +252,11 @@ define(function(require, exports, module) {
                     if(resp.success){
                         env.editor.cmdLine.setValue(fileName + " successfully saved");
                     }
-                    // var FileTreeView = require("js/views/FileTreeView");
-                    // var tv = new FileTreeView(resp.tree);
-                    // $("#myModal").modal("hide");
+                    //sync session value with collection
+                    session.set('value', content);
+                    //change filename span *
+                    var span = $('#' + id + '_tab').find('span').first();
+                    span.html(session.get('filename'));
                 }
             });            
         }

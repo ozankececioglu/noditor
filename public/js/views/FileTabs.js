@@ -13,7 +13,7 @@ define([
         , initialize : function() {
             _.bindAll(this, 'openTab', 'removeTab');
             this.openTabs = new (Backbone.Collection.extend({}))();
-            this.openedFiles = new (Backbone.Collection.extend({}))();
+            this.sessions = new (Backbone.Collection.extend({}))();
             this.on('add', this.addTab, this);
         }
         , addTab : function(fileModel) {
@@ -27,8 +27,8 @@ define([
             //note that this flag should be set to true at opening
             env.noFile = false;
             //if it was not fetched already fetch file content and save it in 
-            //openedFiles collection
-            if(this.openedFiles.get(id) === undefined) {
+            //sessions collection
+            if(this.sessions.get(id) === undefined) {
                 var EditSession = require("ace/edit_session").EditSession;
                 var UndoManager = require("ace/undomanager").UndoManager;
                 var mode = modelist.getModeForPath(fileName);
@@ -44,10 +44,22 @@ define([
                         var session = new EditSession(value, modelist.getModeForPath(fileName));
                         session.setUndoManager(new UndoManager);
                         session.setMode(mode.mode);
-                        //window.env.editor.setSession(session);
-                        //add to openedFiles collection
-                        self.openedFiles.add({
+
+                        //on change event of session compare values
+                        //and put * charachter to filename
+                        //TODO: throttle here
+                        session.on('change', function() {
+                            var s = $('#' + id + '_tab').find('span').first();
+                            if(self.sessions.get(id).get('value') !== session.getValue()){
+                                s.html(fileName + '*');
+                            } else {
+                                s.html(fileName);
+                            }
+                        });
+                        //add to sessions collection
+                        self.sessions.add({
                             id : id
+                            , filename : fileName
                             , value : value
                             , mode : modelist.getModeForPath(fileName)
                             , session : session
@@ -56,7 +68,7 @@ define([
                     }
                 });
             } else {
-                window.env.editor.setSession(this.openedFiles.get(id).get('session'));
+                window.env.editor.setSession(this.sessions.get(id).get('session'));
                 this.renderTab(fileModel);
             }
             
@@ -71,7 +83,7 @@ define([
             if(this.openTabs.get(id) === undefined) {
                 this.openTabs.add(fileModel);
                 var li = $('<li data-file-name="'+fileName+'"'+
-                    'class="tab-link active" id="' + id + '_tab">' + fileName +
+                    'class="tab-link active" id="' + id + '_tab"><span>' + fileName + '</span>' +
                     '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
                     '</li>'); 
                 this.$el.append(li);               
@@ -83,14 +95,17 @@ define([
             this.setActiveTab(id);
         }
         , openTab : function(e) {
+            // if($(e.target).is('span')) {
+            //     this.removeTab()
+            // }
             $('li', this.el).removeClass('active');
-            $(e.target).addClass('active');
-            var fileId = $(e.target).attr('id').split('_')[0];
+            $(e.target).closest('li').addClass('active');
+            var fileId = $(e.target).closest('li').attr('id').split('_')[0];
             this.setActiveTab(fileId);
         }
-        //set session (it should be already in openedFiles collection)
+        //set session (it should be already in sessions collection)
         , setActiveTab : function(fileId) {
-            var session = this.openedFiles.get(fileId).get('session');
+            var session = this.sessions.get(fileId).get('session');
             window.env.editor.setSession(session);
             this.focusSession();
         }
