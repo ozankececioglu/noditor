@@ -74,6 +74,7 @@ define([
                 $('li', this.el).removeClass('active');
                 $('#' + id + '_tab').addClass('active');
             }
+            this.$el.addClass('filled');
             this.setActiveTab(id);
         }
         , openTab : function(e) {

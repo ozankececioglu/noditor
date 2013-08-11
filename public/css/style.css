@@ -178,6 +178,10 @@ body {
     border-bottom: 2px solid #555; */
 }
 
+#editor-tabs.filled {
+    border-bottom: 4px solid #555;
+}
+
 #editor-tabs.occupied {
     margin-top: 12px;
     margin-bottom: 1px;
@@ -202,11 +206,14 @@ body {
 
     box-shadow: 1px 1px 4px #333;
     line-height: 24px;
+
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;    
 }
 
 #editor-tabs li.active {
     /*box-shadow: 1px 1px 4px #fff;*/
-    background: #333;
+    background: #555;
 }
 
 
