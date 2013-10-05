@@ -14,13 +14,8 @@ function readFolder(sftp, folderName, res){
       var count = list.length;
 
       list.forEach(function(l){
-        console.log(l);
-        //count--;
         if(l.filename!="." && l.filename!="..") {
-          //console.log(count);
           var fileName = folderName+"/"+l.filename;
-          console.log(fileName);
-          //console.log(fileName);
           if(count<=0){
             console.log(result);
             return;
@@ -33,7 +28,6 @@ function readFolder(sftp, folderName, res){
                 result.files.push(fileName);
             }
             if(count<=2){
-              console.log(result);
               res.write(JSON.stringify({
                   success: true
                   , tree: result
@@ -202,8 +196,6 @@ exports.readFile = function(req, res){
 exports.writeFile = function(req, res){
   var fileContent = req.param("content");
   var fileName = req.param("name");
-
-  console.log(fileContent);
 
   //sftpConnection.fastPut("../../tmp/text-x.js", "/home/diki/nodes/noditor/test-x.js", function);
   var ws = sftpConnection.createWriteStream(fileName, {autoClose: false});
