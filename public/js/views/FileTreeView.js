@@ -24,6 +24,7 @@ define([
 
           this.fileTreeMap = {}
 
+          console.log("file tree view initi");
           //fileTreeMap[options.name] = 
       },
 

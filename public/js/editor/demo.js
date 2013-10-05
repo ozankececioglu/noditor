@@ -7,6 +7,7 @@ define(function(require, exports, module) {
 
     var config = require("ace/config");
     config.init();
+
     var env = {};
     var app = {};
 
@@ -16,12 +17,13 @@ define(function(require, exports, module) {
     $("#password").val(readCookie("password"));
     $("#directory").val(readCookie("directory"));
     $("#host").val(readCookie("host"));
+
     //click event for settings
     $("#settings").click(function() {
         $("#menu-toggle").toggle();
-    })
-    var boot = require("bootstrap");
+    });
 
+    var boot = require("bootstrap");
     //context menu for fileTreeView
     var context = require("context");
     context.init({
@@ -32,7 +34,11 @@ define(function(require, exports, module) {
     context.attach('.node-name', [{
         text: "New Folder"
     }, {
-        text: "New File"
+        text: "New File",
+        action: function() {
+            $("#newFileModal").modal();
+
+        }
     }, {
         text: "Delete"
     }]);  
@@ -40,7 +46,42 @@ define(function(require, exports, module) {
         text: "Save"
     }, {
         text: "Delete"
-    }]);      
+    }]); 
+
+    //context menu event for folder
+    $(document).on("contextmenu", ".node-name", function(e){
+       console.log("new file context opened");
+       window.lastContextFolderName = $(e.target).prev().attr("data-location");
+       window.lastContextFolderDOM = $(e.target).parent().parent();
+    });
+    //context menu event for file
+    $(document).on("contextmenu", ".file-name", function(e){
+       console.log("delete file context opened");
+       window.lastContectFile = $(e.target).attr("data-location");
+    });
+
+    //create file click event
+    $("#create-file").click(function() {
+        var fileName = window.lastContextFolderName + "/" + $("#fileName").val();
+        $.ajax({
+            type: "POST",
+            url: "/sftp/touch",
+            data: {
+                name : fileName
+            },
+            dataType: "json",
+            success: function(resp){
+                //insert the shit
+                window.lastContextFolderDOM.find('.files-container').append(
+                '<div id="file-' + randString(5) +
+                '" class="file-name" style="margin-left:' + '12px" data-location="'+
+                fileName + '">' + $("#fileName").val() + '</div>');
+
+                // window.lastContextFolderDOM.find(".toggle-folder")                
+                $("#newFileModal").modal('hide');
+            }
+        });
+    });
     //file tabs view;
     window.app = app;
     var tabs = require('js/views/FileTabs');
@@ -60,7 +101,6 @@ define(function(require, exports, module) {
     var Renderer = require("ace/virtual_renderer").VirtualRenderer;
     var Editor = require("ace/editor").Editor;
     var MultiSelect = require("ace/multi_select").MultiSelect;
-    console.log("dom", dom, "renderer", Renderer);
     
     var whitespace = require("ace/ext/whitespace");
 
@@ -304,6 +344,7 @@ define(function(require, exports, module) {
                   root: $("#directory").val(),
                   host: $("#host").val()
                 },
+
                 dataType: "json",
                 url: "/sftp",
 
@@ -314,7 +355,7 @@ define(function(require, exports, module) {
                     createCookie("host", $("#host").val(), 2);
 
                     var FileTreeView = require("js/views/FileTreeView");
-                    var tv = new FileTreeView(resp.tree);
+                    window.fileTreeView = new FileTreeView(resp.tree);
                     $("#myModal").modal("hide");
                 }
             });
@@ -676,5 +717,13 @@ define(function(require, exports, module) {
         }
         return null;
     }
+    function randString(x){
+        var s = "";
+        while(s.length<x&&x>0){
+            var r = Math.random();
+            s+= String.fromCharCode(Math.floor(r*26) + (r>0.5?97:65));
+        }
+        return s;
+    }    
 
 });

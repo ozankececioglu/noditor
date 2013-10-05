@@ -41,7 +41,6 @@ define([
                     }
                     , dataType: "text"
                     , success : function(value) {
-                        console.log("value coming from sftp", value);
                         //create new EditSession with new undoManager
                         var session = new EditSession(value, modelist.getModeForPath(fileName));
                         session.setUndoManager(new UndoManager);

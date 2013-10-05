@@ -17,6 +17,16 @@ block content
       button.btn(data-dismiss='modal', aria-hidden='true') Close
       button#start-sftp.btn.btn-primary Send
 
+  #newFileModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+      h3#myModalLabel Modal header
+    .modal-body
+      input#fileName
+    .modal-footer
+      button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+      button#create-file.btn.btn-primary Create
+
   div#folder-tree
     a.btn(href='#myModal', role='button', data-toggle='modal') Connect to SFTP Server
     div.folders-container
@@ -204,25 +214,27 @@ block content
     DEVEL
   script(type='text/javascript').
     var require = {
-    baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
-    paths: {
-      jquery: "js/vendor/jquery.min",
-      underscore: "js/vendor/underscore-min",
-      backbone: "js/vendor/backbone-min",
-      ace: "js/lib/ace",
-      bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min',
-      context : 'js/vendor/context'
-    },
-    shim: {
-      'underscore': {
-        exports: "_"
+      baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
+      paths: {
+        jquery: "js/vendor/jquery.min",
+        underscore: "js/vendor/underscore-min",
+        backbone: "js/vendor/backbone-min",
+        ace: "js/lib/ace",
+        bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min',
+        context : 'js/vendor/context',
+        bootbox : 'js/vendor/bootbox'
       },
-      'backbone': {
-        deps: ['underscore', 'jquery'],
-        exports: 'Backbone'
+      shim: {
+        'underscore': {
+          exports: "_"
+        },
+        'backbone': {
+          deps: ['underscore', 'jquery'],
+          exports: 'Backbone'
+        },
+        'bootstrap' : ['jquery'],
+        'bootbox'   : ['jquery']
       },
-      'bootstrap' : ['jquery']
-    },
-    waitSeconds: 30
+      waitSeconds: 30
     };
   script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')

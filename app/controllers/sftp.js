@@ -210,3 +210,18 @@ exports.writeFile = function(req, res){
   });
 }
 
+exports.createFile = function(req, res) {
+  var fileName = req.param("name");
+  try {
+    console.log(fileName);
+    sftpConnection.createWriteStream(fileName, {autoClose: false});
+    res.write(JSON.stringify({
+        success: true
+    }));
+
+    res.end();     
+  } catch(e) {
+    res.send("",400);
+  }
+}
+
