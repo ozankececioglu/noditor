@@ -9,7 +9,7 @@ define([
       el: "#folder-tree",
 
       events: {
-          "click .toggle-folder": "toggleFolderContent",
+          "click .toggle-folder, .node-name": "toggleFolderContent",
           "dblclick .file-name": "openFile",
           "click .tab-link": "updateEditorValue"
       },
@@ -166,11 +166,11 @@ define([
             if(p.find(".folders-container").first().is(":visible")){
               p.find(".folders-container").first().hide();
               p.find(".files-container").last().hide();
-              target.html('&#9654;');
+              if(target.hasClass("toggle-folder")) target.html('&#9654;');
             } else {
               p.find(".folders-container").first().show();
               p.find(".files-container").last().show();
-              target.html('&#9660;');
+              if(target.hasClass("toggle-folder")) target.html('&#9660;');
             }
             
           }

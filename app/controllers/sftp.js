@@ -14,6 +14,15 @@ function readFolder(sftp, folderName, res){
     console.log(folderName);
     sftp.readdir(handle, function(err, list){
       var count = list.length;
+      console.log(count);
+      if(list.length === 2) {
+        res.write(JSON.stringify({
+            success: true
+            , tree: result
+        }));
+        res.end();                  
+        return;        
+      }
 
       list.forEach(function(l){
         if(l.filename!="." && l.filename!="..") {
