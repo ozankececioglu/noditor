@@ -33,14 +33,20 @@ define(function(require, exports, module) {
     });
     context.attach('.node-name', [{
         text: "New Folder"
+        , action: function() {
+            $("#newFolderModal").modal();
+        }        
     }, {
-        text: "New File",
-        action: function() {
+        text: "New File"
+        , action: function() {
             $("#newFileModal").modal();
-
         }
     }, {
         text: "Delete"
+        , action: function() {
+            $("#deleteFolderName").html(lastContextFolderName);
+            $("#removeFolderModal").modal();
+        }        
     }]);  
     context.attach('.file-name', [{
         text: "Save"
@@ -51,6 +57,7 @@ define(function(require, exports, module) {
     //context menu event for folder
     $(document).on("contextmenu", ".node-name", function(e){
        console.log("new file context opened");
+       //set this variables to use in new folder and new file
        window.lastContextFolderName = $(e.target).prev().attr("data-location");
        window.lastContextFolderDOM = $(e.target).parent().parent();
     });
@@ -79,6 +86,76 @@ define(function(require, exports, module) {
 
                 // window.lastContextFolderDOM.find(".toggle-folder")                
                 $("#newFileModal").modal('hide');
+                if(!window.lastContextFolderDOM.find('.files-container').is(':visible')) {
+                    window.lastContextFolderDOM.find('.toggle-folder').first().click();
+                }
+            }
+        });
+    });
+
+    //create folder click event
+    $("#create-folder").click(function() {
+        var fileName = window.lastContextFolderName + "/" + $("#folderName").val();
+        $.ajax({
+            type: "POST",
+            url: "/sftp/mkdir",
+            data: {
+                name : fileName
+            },
+            dataType: "json",
+            success: function(resp){
+                //insert the shit
+                window.lastContextFolderDOM.find(".folders-container").first().append(
+                    '<div class="tree-node" style="padding-left:12px;">' +
+                      '<div class="name-info">' +
+                        '<span class="toggle-folder" data-fetched="0" data-location="'+fileName+'">&#9654;</span>' +
+                        '<span class="node-name">' + $("#folderName").val() + '</span>' +
+                      '</div>' +
+                      '<div class="folders-container" style="display:none;">'+
+                      '</div>' +
+                      '<div class="files-container" style="display:none;">'+
+                      '</div>'+            
+                    '</div>'
+                );
+                // window.lastContextFolderDOM.find(".toggle-folder")                
+                $("#newFolderModal").modal('hide');
+                if(!window.lastContextFolderDOM.find('.folders-container').is(':visible')) {
+                    window.lastContextFolderDOM.find('.toggle-folder').first().click();
+                }
+            }
+        });
+    });
+
+    //delete folder click event
+    $("#delete-folder").click(function() {
+        var fileName = window.lastContextFolderName;
+        $.ajax({
+            type: "POST",
+            url: "/sftp/rmdir",
+            data: {
+                name : fileName
+            },
+            dataType: "json",
+            success: function(resp){
+                //insert the shit
+                // window.lastContextFolderDOM.find(".folders-container").first().append(
+                //     '<div class="tree-node" style="padding-left:12px;">' +
+                //       '<div class="name-info">' +
+                //         '<span class="toggle-folder" data-fetched="0" data-location="'+fileName+'">&#9654;</span>' +
+                //         '<span class="node-name">' + $("#folderName").val() + '</span>' +
+                //       '</div>' +
+                //       '<div class="folders-container" style="display:none;">'+
+                //       '</div>' +
+                //       '<div class="files-container" style="display:none;">'+
+                //       '</div>'+            
+                //     '</div>'
+                // );
+                // // window.lastContextFolderDOM.find(".toggle-folder")   
+                window.lastContextFolderDOM.remove();             
+                $("#removeFolderModal").modal('hide');
+                // if(!window.lastContextFolderDOM.find('.folders-container').is(':visible')) {
+                //     window.lastContextFolderDOM.find('.toggle-folder').first().click();
+                // }
             }
         });
     });

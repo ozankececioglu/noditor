@@ -1,4 +1,6 @@
-var sftpConnection = false;
+var sftpConnection = false
+  , connection = false;
+
 function readFolder(sftp, folderName, res){
   var result = {
     folders: [],
@@ -64,6 +66,7 @@ exports.start = function(req, res) {
 
     c.on('ready', function() {
       console.log('Connection :: ready');
+      connection = c;
       //sftpConnection = c;
       c.sftp(function(err, sftp) {
 
@@ -95,10 +98,10 @@ exports.start = function(req, res) {
       host: host,
       port: 22,
       username: username,
-      password: password
-      // hostVerifier: function(){
-      //   return true;
-      // }
+      password: password,
+      hostVerifier: function(){
+        return true;
+      }
     });
 
     var started=0, finished=0, running=0;
@@ -222,6 +225,40 @@ exports.createFile = function(req, res) {
     res.end();     
   } catch(e) {
     res.send("",400);
+  }
+}
+
+exports.createFolder = function(req, res) {
+  var folderName = req.param("name");
+  sftpConnection.mkdir(folderName, function(err){
+    if(err) res.send(500);
+    res.send({success: true});
+  });
+}
+
+exports.removeFolder = function(req, res) {
+  var folderName = req.param("name");
+  console.log(folderName);
+  try {
+    connection.exec('rm -R ' + folderName, function(err, stream){
+      if (err) { throw err; res.send(500); }
+      stream.on('data', function(data, extended) {
+        console.log((extended === 'stderr' ? 'STDERR: ' : 'STDOUT: ')
+                    + data);
+      });
+      stream.on('end', function() {
+        console.log('Stream :: EOF');
+      });
+      stream.on('close', function() {
+        console.log('Stream :: close');
+      });
+      stream.on('exit', function(code, signal) {
+        if(code === 0) res.send({success: true});
+        console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+      });
+    });
+  } catch(e) {
+    console.log(e);
   }
 }
 
