@@ -9,7 +9,8 @@ define([
       el: "#folder-tree",
 
       events: {
-          "click .toggle-folder, .node-name": "toggleFolderContent",
+          "click .toggle-folder": "toggleFolderContent",
+          "click .node-name" : "toggleFolderContent",
           "dblclick .file-name": "openFile",
           "click .tab-link": "updateEditorValue"
       },
@@ -140,19 +141,30 @@ define([
           // $(e.target).parent().parent().find(".files-container").last().toggle();
           var self = this;
 
-          var target = $(e.target);
+          var target = $(e.target)
+            , dataFetched = false
+            , dataLocation = false;
 
-          if(target.attr("data-fetched") === '0'){
+          if(!target.hasClass("toggle-folder")) {
+            target = $(e.target).prev();
+            dataFetched = target.attr("data-fetched");
+            dataLocation = target.attr("data-location");
+          } else {
+            target = $(e.target);
+            dataFetched = target.attr("data-fetched");
+            dataLocation = target.attr("data-location");
+          }
+          if(dataFetched === '0'){
             $.ajax({
               type: "POST",
               url: "/sftp/dir",
               dataType: 'json',
               data: {
-                root: $(e.target).attr("data-location")
+                root: dataLocation
               },
               success: function(resp){
                 //console.log(resp);
-                var p = $(e.target).parent().parent();
+                var p = target.parent().parent();
                 self.buildFileTree(p, resp.tree);
                 p.find(".folders-container").first().show();
                 p.find(".files-container").last().show();
