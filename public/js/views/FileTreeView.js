@@ -24,7 +24,8 @@ define([
           this.render();
 
           this.fileTreeMap = {}
-
+          this.$el.show();
+          $("#connect-modal").hide();
           console.log("file tree view initi");
           //fileTreeMap[options.name] = 
       },
@@ -32,7 +33,7 @@ define([
       render: function(){
           this.$el.html("");
           var tr = '&#9660;';
-          var rootNode = $('<div class="tree-node" style="padding-left:12px;">' +
+          var rootNode = $('<div class="sidebar-brand" style="padding-left:12px;">' +
             '<div class="name-info">' +
               '<span class="toggle-folder" data-fetched="1" data-location="'+this.options.name+'">'+'</span>' +
               '<span class="node-name" style="font-weight:bold;">' + 'FOLDERS' + '</span>' +
@@ -58,7 +59,7 @@ define([
           var names = name.split('/');
           var n = names[names.length-1];
           el.find(".folders-container").first().append(
-            '<div class="tree-node" style="padding-left:12px;">' +
+            '<div class="tree-node" style="padding-left:12px; line-height:30px; font-size:16px;">' +
               '<div class="name-info">' +
                 '<span class="toggle-folder" data-fetched="0" data-location="'+name+'">'+ra+'</span>' +
                 '<span class="node-name">' + n + '</span>' +

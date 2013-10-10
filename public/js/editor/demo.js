@@ -22,7 +22,16 @@ define(function(require, exports, module) {
     $("#settings").click(function() {
         $("#menu-toggle").toggle();
     });
+    //connect modal
+    $("#connect-modal").click(function(){
+        console.log("sdsd");
+        $("#connectModal").modal('show');
+    });
 
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("active");
+    });
     var boot = require("bootstrap");
     //context menu for fileTreeView
     var context = require("context");
@@ -402,11 +411,11 @@ define(function(require, exports, module) {
         var left = env.split.$container.offsetLeft;
         var width = document.documentElement.clientWidth;
         //container.style.width = "100%";
-        container.style.height = document.documentElement.clientHeight - consoleHeight - 45 + "px";
+        container.style.height = document.documentElement.clientHeight - consoleHeight + 'px';
         env.split.resize();
 
         console.log("window resize", width);
-        consoleEl.style.width = width + "px";
+        consoleEl.style.width = width - 250  + "px";
 
         var editMenu = document.getElementById("menu-toggle");
         editMenu.style.height = document.documentElement.clientHeight - consoleHeight + "px";
@@ -433,7 +442,7 @@ define(function(require, exports, module) {
 
                     var FileTreeView = require("js/views/FileTreeView");
                     window.fileTreeView = new FileTreeView(resp.tree);
-                    $("#myModal").modal("hide");
+                    $("#connectModal").modal("hide");
                 }
             });
         });
