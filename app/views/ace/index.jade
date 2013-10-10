@@ -1,22 +1,37 @@
-extends ../layouts/default
+!!! 5
+html(lang='en')
+head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title Starter Template for Bootstrap
+    //
+       Bootstrap core CSS 
+    link(href='css/bootstrap.css', rel='stylesheet')
+    link(href='css/bootstrap-responsive.css', rel='stylesheet')
+    //
+       Add custom CSS here 
+    link(href='css/simple-sidebar.css', rel='stylesheet')
+    link(href='css/style.css', rel='stylesheet')
+    link(href='font-awesome/css/font-awesome.min.css', rel='stylesheet')
+  body
 
-block main
-
-block content
- 
-  #myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+  #connectModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+    .modal-header
+      button(type='button', class='close', data-dismiss="modal", aria-hidden="true") x
     .modal-body
-      input#username(type="text", placeholder="username")
-      input#password(type="text", placeholder="password")
-      input#host(type="text", placeholder="host")
-      input#directory(type="text", placeholder="directory")
+      input.span2#username(type="text", placeholder="username")
+      input.span2#password(type="password", placeholder="password")
+      input.span2#host(type="text", placeholder="host")
+      input.span2#directory(type="text", placeholder="directory")
     .modal-footer
       button#start-sftp.btn.btn-success Connect
       button.btn(data-dismiss='modal', aria-hidden='true') Cancel
-
+      
   #newFileModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
     .modal-body
-      input#fileName
+      input#fileName(placeholder="filename")
     .modal-footer
       button#create-file.btn.btn-primary Create
       button.btn(data-dismiss='modal', aria-hidden='true') Cancel
@@ -35,10 +50,7 @@ block content
     .modal-footer
       button#delete-folder.btn.btn-danger Delete
       button.btn(data-dismiss='modal', aria-hidden='true') Cancel
-      
-  div#folder-tree
-    a.btn(href='#myModal', role='button', data-toggle='modal') Connect to SFTP Server
-    div.folders-container
+
   div.editor-menu#menu-toggle(style='display:none;')
       div.menu#menu-content
         #optionsPanel(style='height: 100%; background:#fff;')
@@ -214,22 +226,34 @@ block content
                           input#read_only(type='checkbox')
                       tr
                         td(colspan='2')
-                          input(type='button', value='Edit Snippets', onclick='env.editSnippets()')
-  #editors
-    #editor-container
-      ul#editor-tabs.empty
+                          input(type='button', value='Edit Snippets', onclick='env.editSnippets()')  
 
-  //
-    DEVEL
+
+    #wrapper
+      //
+         Sidebar 
+      #sidebar-wrapper
+        button#connect-modal.btn.btn-warning.btn-large(style="width:250px; border-radius: 0;") 
+          i.icon-unlink 
+          span Connect to server
+
+        div.sidebar-nav#folder-tree(style="display:none")
+      //
+         Page content 
+      #page-content-wrapper
+        .page-content
+          ul#editor-tabs.empty
+          #editor-container(style="position:relative;")
+
   script(type='text/javascript').
     var require = {
       baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
       paths: {
-        jquery: "js/vendor/jquery.min",
+        jquery: "js/jquery",
         underscore: "js/vendor/underscore-min",
         backbone: "js/vendor/backbone-min",
         ace: "js/lib/ace",
-        bootstrap: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min',
+        bootstrap: 'js/bootstrap',
         context : 'js/vendor/context',
         bootbox : 'js/vendor/bootbox'
       },
@@ -246,4 +270,6 @@ block content
       },
       waitSeconds: 30
     };
-  script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')
+  script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')    
+
+

@@ -1,11 +1,11 @@
 /*!
  * Bootstrap v2.3.2
  *
- * Copyright 2012 Twitter, Inc
+ * Copyright 2013 Twitter, Inc
  * Licensed under the Apache License v2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * Designed and built with all the love in the world by @mdo and @fat.
  */
 
 .clearfix {
@@ -1196,7 +1196,7 @@ input[type="file"] {
 }
 
 select {
-  /*width: 220px;*/
+  width: 220px;
   background-color: #ffffff;
   border: 1px solid #cccccc;
 }
@@ -5228,7 +5228,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .modal.fade.in {
-  top: -4px;
+  top: 10%;
 }
 
 .modal-header {

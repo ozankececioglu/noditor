@@ -59,7 +59,7 @@ define([
           var names = name.split('/');
           var n = names[names.length-1];
           el.find(".folders-container").first().append(
-            '<div class="tree-node" style="padding-left:12px; line-height:30px; font-size:16px;">' +
+            '<div class="tree-node" style="padding-left:12px; line-height:30px; font-size:15px;">' +
               '<div class="name-info">' +
                 '<span class="toggle-folder" data-fetched="0" data-location="'+name+'">'+ra+'</span>' +
                 '<span class="node-name">' + n + '</span>' +

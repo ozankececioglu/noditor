@@ -1,5 +1,5 @@
 exports.index = function(req, res){
-  res.render('ace/index2', {
+  res.render('ace/index', {
     title: 'ACE Editor'
   })
 }

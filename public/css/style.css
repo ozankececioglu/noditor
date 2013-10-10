@@ -143,6 +143,7 @@ body {
 
 .file-name {
     cursor: pointer;
+    font-size: 15px;
 }
 
 .toggle-folder {
@@ -152,6 +153,11 @@ body {
 .name-info:hover{
     color: #EEE;
     cursor: pointer;
+    background: #333;
+}
+
+.tree-node:hover {
+    /*background: #333;   */
 }
 
 #editor-tabs {
@@ -193,8 +199,9 @@ body {
 
     box-shadow: 1px 1px 4px #333;
     line-height: 24px;
-    background: #ddd;
+    background: #e5e5e5;
    font-size: 12px;
+   transition: all 0.4s ease 0s;
 }
 
 #editor-tabs li.active {
