@@ -271,3 +271,28 @@ exports.removeFolder = function(req, res) {
   }
 }
 
+exports.removeFile = function(req, res) {
+  var folderName = req.param("name");
+  try {
+    connection.exec('rm ' + folderName, function(err, stream){
+      if (err) { throw err; res.send(500); }
+      stream.on('data', function(data, extended) {
+        console.log((extended === 'stderr' ? 'STDERR: ' : 'STDOUT: ')
+                    + data);
+      });
+      stream.on('end', function() {
+        console.log('Stream :: EOF');
+      });
+      stream.on('close', function() {
+        console.log('Stream :: close');
+      });
+      stream.on('exit', function(code, signal) {
+        if(code === 0) res.send({success: true});
+        console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+      });
+    });
+  } catch(e) {
+    console.log(e);
+  }
+}
+

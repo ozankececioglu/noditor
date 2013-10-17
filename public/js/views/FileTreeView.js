@@ -61,7 +61,7 @@ define([
           el.find(".folders-container").first().append(
             '<div class="tree-node" style="padding-left:12px; line-height:30px; font-size:15px;">' +
               '<div class="name-info">' +
-                '<span class="toggle-folder" data-fetched="0" data-location="'+name+'">'+ra+'</span>' +
+                '<span class="toggle-folder" data-fetched="0" data-location="'+name+'" title="'+name+'">'+ra+'</span>' +
                 '<span class="node-name">' + n + '</span>' +
               '</div>' +
               '<div class="folders-container" style="display:none;">'+
@@ -78,7 +78,7 @@ define([
           el.find(".files-container").last().append(
             '<div id="file-'+self.fileIndex+
             '" class="file-name" style="margin-left:'+'12px" data-location="'+
-            name+'">'+n+'</div>'
+            name+'" title="'+name+'">'+n+'</div>'
           );
           self.fileIndex++;
         });

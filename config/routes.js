@@ -13,5 +13,6 @@ module.exports = function (app, passport, auth) {
   app.post('/sftp/touch', sftp.createFile);
   app.post('/sftp/mkdir', sftp.createFolder);
   app.post('/sftp/rmdir', sftp.removeFolder);
+  app.post('/sftp/rm', sftp.removeFile);
 
 }

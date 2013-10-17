@@ -46,7 +46,7 @@ body {
     /*right: 20px;*/
     display:block; 
     /*width: 64px; */
-    z-index:9;
+    z-index:9999;
     border-bottom: none;
 /*overflow-y: scroll;*/
     /*overflow: hidden;    */
@@ -74,7 +74,7 @@ body {
 
 .editor-menu .menu label {
     font-size: 12px;
-    text-shadow: 0 0 2px #aaa;
+    /*text-shadow: 0 0 2px #aaa;*/
 }
 
 .editor-menu .menu select {
@@ -153,7 +153,7 @@ body {
 .name-info:hover{
     color: #EEE;
     cursor: pointer;
-    background: #333;
+    /*background: #333;*/
 }
 
 .tree-node:hover {
@@ -231,11 +231,12 @@ body {
     -moz-box-shadow: 0 2px 1px -1px rgba(0,0,0,0.07);
     box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.07);
     border-bottom: 1px solid #CCC;
+    width: 100%;
 }
 
 .area-top > #settings {
     color: black;
-    font-weight: bold;
+    /*font-weight: bold;*/
     margin-left: 1px;
     padding: 2px 24px;
     border: 1px solid #e5e5e5;

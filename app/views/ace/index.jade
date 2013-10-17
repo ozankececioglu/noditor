@@ -1,14 +1,14 @@
 !!! 5
 html(lang='en')
-head
+  head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='')
     meta(name='author', content='')
-    title Starter Template for Bootstrap
+    title Node Explorer
     //
        Bootstrap core CSS 
-    link(href='css/bootstrap.css', rel='stylesheet')
+    link(href='css/bootstrap-cosmo.css', rel='stylesheet')
     link(href='css/bootstrap-responsive.css', rel='stylesheet')
     //
        Add custom CSS here 
@@ -17,42 +17,48 @@ head
     link(href='font-awesome/css/font-awesome.min.css', rel='stylesheet')
   body
 
-  #connectModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    .modal-header
-      button(type='button', class='close', data-dismiss="modal", aria-hidden="true") x
-    .modal-body
-      input.span2#username(type="text", placeholder="username")
-      input.span2#password(type="password", placeholder="password")
-      input.span2#host(type="text", placeholder="host")
-      input.span2#directory(type="text", placeholder="directory")
-    .modal-footer
-      button#start-sftp.btn.btn-success Connect
-      button.btn(data-dismiss='modal', aria-hidden='true') Cancel
-      
-  #newFileModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
-    .modal-body
-      input#fileName(placeholder="filename")
-    .modal-footer
-      button#create-file.btn.btn-primary Create
-      button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+    #connectModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-body
+        input.span2#username(type="text", placeholder="username")
+        input.span2#password(type="password", placeholder="password")
+        input.span2#host(type="text", placeholder="host")
+        input.span2#directory(type="text", placeholder="directory")
+      .modal-footer
+        button#start-sftp.btn.btn-success Connect
+        button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+        
+    #newFileModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
+      .modal-body
+        input#fileName(placeholder="filename")
+      .modal-footer
+        button#create-file.btn.btn-primary Create
+        button.btn(data-dismiss='modal', aria-hidden='true') Cancel
 
-  #newFolderModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
-    .modal-body
-      input#folderName(type="text", placeholder="folder name")
-    .modal-footer
-      button#create-folder.btn.btn-primary Create
-      button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+    #newFolderModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
+      .modal-body
+        input#folderName(type="text", placeholder="folder name")
+      .modal-footer
+        button#create-folder.btn.btn-primary Create
+        button.btn(data-dismiss='modal', aria-hidden='true') Cancel
 
-  #removeFolderModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
-    .modal-body
-      div(style='color: black') Delete 
-        span#deleteFolderName folder
-    .modal-footer
-      button#delete-folder.btn.btn-danger Delete
-      button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+    #removeFolderModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
+      .modal-body
+        div(style='color: black') Delete 
+          span#deleteFolderName folder
+      .modal-footer
+        button#delete-folder.btn.btn-danger Delete
+        button.btn(data-dismiss='modal', aria-hidden='true') Cancel
 
-  div.editor-menu#menu-toggle(style='display:none;')
-      div.menu#menu-content
+    #removeFileModal.modal.hide.fade(tabindex='-1', role='dialog', aria-hidden='true')
+      .modal-body
+        div(style='color: black') Delete 
+          span#deleteFileName folder
+      .modal-footer
+        button#delete-file.btn.btn-danger Delete
+        button.btn(data-dismiss='modal', aria-hidden='true') Cancel
+
+    div.editor-menu#menu-toggle(style='display:none;')
+      div.menu#menu-content(style='')
         #optionsPanel(style='height: 100%; background:#fff;')
           div()
               table#controls
@@ -228,7 +234,8 @@ head
                         td(colspan='2')
                           input(type='button', value='Edit Snippets', onclick='env.editSnippets()')  
 
-
+    .area-top
+      span#settings Settings                          
     #wrapper
       //
          Sidebar 
@@ -244,32 +251,30 @@ head
         .page-content
           ul#editor-tabs.empty
           #editor-container(style="position:relative;")
-
-  script(type='text/javascript').
-    var require = {
-      baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
-      paths: {
-        jquery: "js/jquery",
-        underscore: "js/vendor/underscore-min",
-        backbone: "js/vendor/backbone-min",
-        ace: "js/lib/ace",
-        bootstrap: 'js/bootstrap',
-        context : 'js/vendor/context',
-        bootbox : 'js/vendor/bootbox'
-      },
-      shim: {
-        'underscore': {
-          exports: "_"
+    script(type='text/javascript').
+      var require = {
+        baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
+        paths: {
+          jquery: "js/vendor/jquery.min",
+          underscore: "js/vendor/underscore-min",
+          backbone: "js/vendor/backbone-min",
+          bootstrap: 'js/vendor/bootstrap',
+          context : 'js/vendor/context' ,
+          ace: "js/lib/ace"
         },
-        'backbone': {
-          deps: ['underscore', 'jquery'],
-          exports: 'Backbone'
+        shim: {
+          'underscore': {
+            exports: "_"
+          },
+          'backbone': {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'
+          },
+          'bootstrap' : ['jquery'],
+          'bootbox'   : ['jquery']
         },
-        'bootstrap' : ['jquery'],
-        'bootbox'   : ['jquery']
-      },
-      waitSeconds: 30
-    };
-  script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')    
+        waitSeconds: 30
+      };
+    script(src='js/editor/require.js', data-main='js/editor/demo', type='text/javascript')    
 
 

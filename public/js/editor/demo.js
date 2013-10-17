@@ -1,3 +1,32 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Distributed under the BSD license:
+ *
+ * Copyright (c) 2010, Ajax.org B.V.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of Ajax.org B.V. nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * ***** END LICENSE BLOCK ***** */
 define(function(require, exports, module) {
     "use strict";
 
@@ -20,6 +49,7 @@ define(function(require, exports, module) {
 
     //click event for settings
     $("#settings").click(function() {
+        console.log("eeee");
         $("#menu-toggle").toggle();
     });
     //connect modal
@@ -61,6 +91,10 @@ define(function(require, exports, module) {
         text: "Save"
     }, {
         text: "Delete"
+        , action : function() {
+            $("#deleteFileName").html(lastContextFileLocation);
+            $("#removeFileModal").modal();
+        }
     }]); 
 
     //context menu event for folder
@@ -71,13 +105,15 @@ define(function(require, exports, module) {
        window.lastContextFolderDOM = $(e.target).parent().parent();
     });
     //context menu event for file
+    //it will set lastContext file
     $(document).on("contextmenu", ".file-name", function(e){
-       console.log("delete file context opened");
-       window.lastContectFile = $(e.target).attr("data-location");
+       window.lastContextFileLocation = $(e.target).attr("data-location");
+       window.lastContextFileDOM = $(e.target);
     });
 
     //create file click event
     $("#create-file").click(function() {
+        $("#fileName").focus();
         var fileName = window.lastContextFolderName + "/" + $("#fileName").val();
         $.ajax({
             type: "POST",
@@ -91,7 +127,7 @@ define(function(require, exports, module) {
                 window.lastContextFolderDOM.find('.files-container').append(
                 '<div id="file-' + randString(5) +
                 '" class="file-name" style="margin-left:' + '12px" data-location="'+
-                fileName + '">' + $("#fileName").val() + '</div>');
+                fileName + '" title="'+fileName+'">' + $("#fileName").val() + '</div>');
 
                 // window.lastContextFolderDOM.find(".toggle-folder")                
                 $("#newFileModal").modal('hide');
@@ -104,6 +140,7 @@ define(function(require, exports, module) {
 
     //create folder click event
     $("#create-folder").click(function() {
+        $("#folderName").focus();
         var fileName = window.lastContextFolderName + "/" + $("#folderName").val();
         $.ajax({
             type: "POST",
@@ -146,37 +183,60 @@ define(function(require, exports, module) {
             },
             dataType: "json",
             success: function(resp){
-                //insert the shit
-                // window.lastContextFolderDOM.find(".folders-container").first().append(
-                //     '<div class="tree-node" style="padding-left:12px;">' +
-                //       '<div class="name-info">' +
-                //         '<span class="toggle-folder" data-fetched="0" data-location="'+fileName+'">&#9654;</span>' +
-                //         '<span class="node-name">' + $("#folderName").val() + '</span>' +
-                //       '</div>' +
-                //       '<div class="folders-container" style="display:none;">'+
-                //       '</div>' +
-                //       '<div class="files-container" style="display:none;">'+
-                //       '</div>'+            
-                //     '</div>'
-                // );
-                // // window.lastContextFolderDOM.find(".toggle-folder")   
                 window.lastContextFolderDOM.remove();             
                 $("#removeFolderModal").modal('hide');
-                // if(!window.lastContextFolderDOM.find('.folders-container').is(':visible')) {
-                //     window.lastContextFolderDOM.find('.toggle-folder').first().click();
-                // }
             }
         });
     });
+
+    //delete folder click event
+    $("#delete-file").click(function() {
+        var fileName = window.lastContextFileLocation;
+        $.ajax({
+            type: "POST",
+            url: "/sftp/rm",
+            data: {
+                name : fileName
+            },
+            dataType: "json",
+            success: function(resp){
+                window.lastContextFileDOM.remove();             
+                $("#removeFileModal").modal('hide');
+            }
+        });
+    });
+
+    $("#start-sftp").click(function(){
+        $.ajax({
+            type: "POST",
+            data: {
+              username: $("#username").val(),
+              password: $("#password").val(),
+              root: $("#directory").val(),
+              host: $("#host").val()
+            },
+
+            dataType: "json",
+            url: "/sftp",
+
+            success: function(resp){
+                createCookie("username", $("#username").val(), 2);
+                createCookie("password", $("#password").val(), 2);
+                createCookie("directory", $("#directory").val(), 2);
+                createCookie("host", $("#host").val(), 2);
+
+                var FileTreeView = require("js/views/FileTreeView");
+                window.fileTreeView = new FileTreeView(resp.tree);
+                $("#connectModal").modal("hide");
+            }
+        });
+    });    
     //file tabs view;
     window.app = app;
     var tabs = require('js/views/FileTabs');
     window.app.FileTabs = new tabs({});
 
-    var dom = require("ace/lib/dom");
-    // var net = require("ace/lib/net");
-    // var lang = require("ace/lib/lang");
-    // var useragent = require("ace/lib/useragent");
+    // var dom = require("ace/lib/dom");
 
     var theme = require("ace/theme/textmate");
     var EditSession = require("ace/edit_session").EditSession;
@@ -236,7 +296,7 @@ define(function(require, exports, module) {
     env.defaultSession = env.editor.session;
     env.noFile = true;
 
-    var consoleEl = dom.createElement("div");
+    var consoleEl = document.createElement("div");
     container.parentNode.appendChild(consoleEl);
     consoleEl.style.cssText = "position:fixed; bottom:1px; right:0;\
     border:1px solid #baf; z-index:100";
@@ -407,7 +467,7 @@ define(function(require, exports, module) {
     /*********** manage layout ***************************/
     var consoleHeight = 20;
     function onResize() {
-
+        console.log("resize the shit");
         var left = env.split.$container.offsetLeft;
         var width = document.documentElement.clientWidth;
         //container.style.width = "100%";
@@ -417,39 +477,12 @@ define(function(require, exports, module) {
         console.log("window resize", width);
         consoleEl.style.width = width - 250  + "px";
 
-        var editMenu = document.getElementById("menu-toggle");
-        editMenu.style.height = document.documentElement.clientHeight - consoleHeight + "px";
+        //var editMenu = document.getElementById("menu-toggle");
+        //editMenu.style.height = document.documentElement.clientHeight - consoleHeight + "px";
         cmdLine.resize();
-
-        $("#start-sftp").click(function(){
-            $.ajax({
-                type: "POST",
-                data: {
-                  username: $("#username").val(),
-                  password: $("#password").val(),
-                  root: $("#directory").val(),
-                  host: $("#host").val()
-                },
-
-                dataType: "json",
-                url: "/sftp",
-
-                success: function(resp){
-                    createCookie("username", $("#username").val(), 2);
-                    createCookie("password", $("#password").val(), 2);
-                    createCookie("directory", $("#directory").val(), 2);
-                    createCookie("host", $("#host").val(), 2);
-
-                    var FileTreeView = require("js/views/FileTreeView");
-                    window.fileTreeView = new FileTreeView(resp.tree);
-                    $("#connectModal").modal("hide");
-                }
-            });
-        });
-
     }
 
-    //window.onresize = onResize;
+    window.onresize = onResize;
     onResize();
 
     /*********** options panel ***************************/
@@ -516,6 +549,17 @@ define(function(require, exports, module) {
     //         env.editor.focus();
     //     });
     // });
+    
+        doclist.loadDoc("JavaScript", function(session) {
+            console.log("eeee lan", session);
+            if (!session)
+                return;
+            doclist.addToHistory(session.name);
+            session = env.split.setSession(session);
+            whitespace.detectIndentation(session);
+            updateUIEditorOptions();
+            env.editor.focus();
+        });    
 
 
     function updateUIEditorOptions() {

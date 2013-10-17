@@ -8,10 +8,10 @@ define([
         el: '#editor-tabs'
         , events : {
             'click .tab-link'       : 'openTab'
-            , 'click .close-tab'    : 'removeTab'
+            , 'click .close-tab'    : 'closeTab'
         }
         , initialize : function() {
-            _.bindAll(this, 'openTab', 'removeTab');
+            _.bindAll(this, 'openTab', 'removeTab', 'closeTab');
             this.openTabs = new (Backbone.Collection.extend({}))();
             this.sessions = new (Backbone.Collection.extend({}))();
             this.on('add', this.addTab, this);
@@ -83,7 +83,7 @@ define([
             //openTabs collection hold only open tabs
             if(this.openTabs.get(id) === undefined) {
                 this.openTabs.add(fileModel);
-                var li = $('<li data-file-name="'+fileName+'"'+
+                var li = $('<li title="'+ location +'" data-file-name="'+fileName+'"'+
                     'class="tab-link active" id="' + id + '_tab"><span>' + fileName + '</span>' +
                     '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
                     '</li>'); 
@@ -111,35 +111,54 @@ define([
             this.focusSession();
         }
         //remove tab after click "x"
-        , removeTab : function (e) {
+        , closeTab : function (e) {
             e.stopPropagation();
             var self = this;
             var id = $(e.target).parent().attr('id').split('_')[0];
             if(id) {
-                var m = self.openTabs.get(id);
-                self.openTabs.remove(m);
-                //if it is active
-                if($(e.target).parent().hasClass('active')) {
-                    //if no tab remained
-                    if($('.tab-link', self.el).length <= 1) {
-                        window.env.editor.setSession(env.defaultSession);
-                        this.focusSession();
-                        env.noFile = true;
-                    } else {
-                        //set previous tab active if exist
-                        if($(e.target).parent().prev().length > 0) {
-                            var fid = $(e.target).parent().prev().attr('id').split('_')[0];
-                            $(e.target).parent().prev().addClass('active');
-                            self.setActiveTab(fid);
-                        } else if($(e.target).parent().next().length > 0) {
-                            var fid = $(e.target).parent().next().attr('id').split('_')[0];
-                            $(e.target).parent().next().addClass('active');
-                            self.setActiveTab(fid);                        
+                var s = this.sessions.get(id);
+                //if tab is closed while file changed
+                if(s.get("value") !== s.get("session").getValue()){
+                    if (confirm("Are you sure you want to close without saving?") ) {
+                        if (confirm("Save your work before leaving?") ) {
+                            // code here for save then leave (Yes)
+                        } else {
+                            //code here for no save but leave (No)
+                            s.get("session").setValue(s.get("value"));
                         }
+                        self.removeTab();                            
+                    } else {
+                        return;
+                    }                    
+                } else {
+                    self.removeTab(id, $(e.target));                    
+                }
+            }
+        }
+        , removeTab : function(id, target) {
+            var m = this.openTabs.get(id);
+            this.openTabs.remove(m);
+            //if it is active
+            if(target.parent().hasClass('active')) {
+                //if no tab remained
+                if($('.tab-link', self.el).length <= 1) {
+                    window.env.editor.setSession(env.defaultSession);
+                    this.focusSession();
+                    env.noFile = true;
+                } else {
+                    //set previous tab active if exist
+                    if(target.parent().prev().length > 0) {
+                        var fid = target.parent().prev().attr('id').split('_')[0];
+                        target.parent().prev().addClass('active');
+                        this.setActiveTab(fid);
+                    } else if(target.parent().next().length > 0) {
+                        var fid = target.parent().next().attr('id').split('_')[0];
+                        target.parent().next().addClass('active');
+                        this.setActiveTab(fid);                        
                     }
                 }
-                $(e.target).parent().remove();
             }
+            target.parent().remove(); 
         }
         , focusSession : function () {
             window.env.editor.focus();
