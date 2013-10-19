@@ -20,10 +20,42 @@
   <body>
     <div id="connectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal hide fade">
       <div class="modal-body">
-        <input id="username" type="text" placeholder="username" class="span2">
-        <input id="password" type="password" placeholder="password" class="span2">
-        <input id="host" type="text" placeholder="host" class="span2">
-        <input id="directory" type="text" placeholder="directory" class="span2">
+<!--       <div class="well">
+
+          <div class="form-group row">
+              <div class="col">
+                  <label for="city" class="control-label">Username</label>
+                  <input type="text" class="form-control" id="username" />
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <div class="col">
+                  <label for="city" class="control-label">Password</label>
+                  <input type="text" class="form-control" id="password" />
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <div class="col">
+                  <label for="city" class="control-label">Host</label>
+                  <input type="text" class="form-control" id="host" />
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <div class="col">
+                  <label for="city" class="control-label">Directory</label>
+                  <input type="text" class="form-control" id="directory" />
+              </div>
+          </div>
+      </div>  -->       
+        <form class="navbar-form" style="text-align:center;">
+          <input id="username" type="text" placeholder="username">
+          <input id="password" type="password" placeholder="password">
+          <input id="host" type="text" placeholder="host">
+          <input id="directory" type="text" placeholder="directory">
+        </form>
       </div>
       <div class="modal-footer">
         <button id="start-sftp" class="btn btn-success">Connect</button>
@@ -328,13 +360,13 @@
         </div>
       </div>
     </div>
-    <div class="area-top"><span id="settings">Settings</span></div>
+    <span id="settings"><i class="icon-th"></i> </span>
     <div id="wrapper">
       <!--
       <Sidebar> </Sidebar>
       -->
       <div id="sidebar-wrapper">
-        <button id="connect-modal" style="width:250px; border-radius: 0;" class="btn btn-warning btn-large"> <i class="icon-unlink"> </i><span>Connect to server</span></button>
+        <a id="connect-modal" > <i class="icon-unlink"> </i><span>Connect to server</span></a>
         <div id="folder-tree" style="display:none" class="sidebar-nav"></div>
       </div>
       <!--

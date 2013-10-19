@@ -142,15 +142,12 @@
 
 .editor-menu {  
     position: absolute; 
-    top: 13px; 
-    /*right: 20px;*/
+    top: 0; 
     display:block; 
-    /*width: 64px; */
-    z-index:9999;
+    z-index:1233;
     border-bottom: none;
-/*overflow-y: scroll;*/
-    /*overflow: hidden;    */
     left:-8px;
+    width:265px;
 }
 
 .toggle-button {
@@ -237,7 +234,7 @@
     height: 100%;
     overflow-y: auto;
     color: #ccc;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     /*font-size: 16px;*/
 }
 
@@ -351,6 +348,37 @@
     margin-left: 1px;
     padding: 2px 24px;
     border: 1px solid #e5e5e5;
+}
+
+span#settings {
+    position: absolute;
+    display: block;
+    top: 5px;
+    left: 212px;
+    color: white;
+    z-index: 1234;
+    border: 2px solid #303030;
+    padding: 2px;
+    background: #000;
+    cursor: pointer;    
+}
+
+a#connect-modal {
+    width: 150px;
+    border-radius: 0;
+    display: block;
+    position: absolute;
+    padding: 17px 0 5px 0px;
+    color: #e5e5e5;
+    border-bottom: 2px solid orange;
+    cursor: pointer;
+    text-align: center;
+    margin-left: 12px;    
+}
+
+a#connect-modal:hover {
+    text-decoration: none;
+    font-weight: bold;
 }
 
 
