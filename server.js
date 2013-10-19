@@ -22,10 +22,14 @@ var express = require('express')
 var env = process.env.NODE_ENV || 'development'
   , config = require('./config/config')[env]
 
-var app = express()
+var app = express();
 // express settings
 require('./config/express')(app, config);
 
+//index.html
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
 // Bootstrap routes
 require('./config/routes')(app)
  

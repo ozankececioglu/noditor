@@ -1,8 +1,8 @@
 module.exports = function (app, passport, auth) {
 
   // home route
-  var ace = require('../app/controllers/ace')
-  app.get('/', ace.index)
+  // var ace = require('../app/controllers/ace')
+  // app.get('/', ace.index)
 
   //sftp roots
   var sftp = require('../app/controllers/sftp');

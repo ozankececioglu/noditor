@@ -13,8 +13,7 @@
       "test": "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec test/test-*.js"
     }
   , "dependencies": {
-      "express": "latest"
-    , "jade": "latest"
-    , "ssh2": "*"
+      "express": "3.4.2"
+    , "ssh2": "0.2.12"
   }
 }
