@@ -203,8 +203,10 @@ function loadDoc(name, callback) {
     // TODO: show load screen while waiting
     var path = doc.path;
     var parts = path.split("/");
-    if (parts[0] == "docs")
+    if (parts[0] == "docs") {
         path = "js/editor/" + path;
+        console.log("lading", path);
+    }
     else if (parts[0] == "ace")
         path = "lib/" + path;
 

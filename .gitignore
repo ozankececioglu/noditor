@@ -14,6 +14,8 @@ sftp-config.json
 
 # OS or Editor folders
 .DS_Store
+*/.DS_Store
+public/js/.DS_Store
 Thumbs.db
 .cache
 .project
