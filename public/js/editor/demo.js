@@ -789,38 +789,51 @@ define(function(require, exports, module) {
     require("ace/placeholder").PlaceHolder;
 
     var snippetManager = require("ace/snippets").snippetManager
-    var jsSnippets = require("ace/snippets/javascript");
-    window.snippetManager = snippetManager
-    saveSnippets()
+    // var jsSnippets = require("ace/snippets/javascript");
+    // window.snippetManager = snippetManager
+    // saveSnippets()
 
-    function saveSnippets() {
-        jsSnippets.snippets = snippetManager.parseSnippetFile(jsSnippets.snippetText);
-        snippetManager.register(jsSnippets.snippets, "javascript")
-    }
+    // function saveSnippets() {
+    //     jsSnippets.snippets = snippetManager.parseSnippetFile(jsSnippets.snippetText);
+    //     snippetManager.register(jsSnippets.snippets, "javascript")
+    // }
 
-    env.editSnippets = function() {
-        var sp = env.split;
-        if (sp.getSplits() == 2) {
-            sp.setSplits(1);
-            return;
-        }
+env.editSnippets = function() {
+    var sp = env.split;
+    if (sp.getSplits() == 2) {
         sp.setSplits(1);
-        sp.setSplits(2);
-        sp.setOrientation(sp.BESIDE);
-        var editor = sp.$editors[1]
-        if (!env.snippetSession) {
-            var file = jsSnippets.snippetText;
-            env.snippetSession = doclist.initDoc(file, "", {});
-            env.snippetSession.setMode("ace/mode/tmsnippet");
-            env.snippetSession.setUseSoftTabs(false);
-        }
-        editor.on("blur", function() {
-            jsSnippets.snippetText = editor.getValue();
-            saveSnippets();
-        })
-        editor.setSession(env.snippetSession, 1);
-        editor.focus();
+        return;
     }
+    sp.setSplits(1);
+    sp.setSplits(2);
+    sp.setOrientation(sp.BESIDE);
+    var editor = sp.$editors[1];
+    var id = sp.$editors[0].session.$mode.$id || "";
+    var m = snippetManager.files[id];
+    if (!doclist["snippets/" + id]) {
+        var text = m.snippetText;
+        var s = doclist.initDoc(text, "", {});
+        s.setMode("ace/mode/snippets");
+        doclist["snippets/" + id] = s
+    }
+    editor.on("blur", function() {
+        m.snippetText = editor.getValue();
+        snippetManager.unregister(m.snippets);
+        m.snippets = snippetManager.parseSnippetFile(m.snippetText, m.scope);
+        snippetManager.register(m.snippets);
+    })
+    sp.$editors[0].once("changeMode", function() {
+        sp.setSplits(1);
+    })
+    editor.setSession(doclist["snippets/" + id], 1);
+    editor.focus();
+}
+
+require("ace/ext/language_tools");
+env.editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableSnippets: true
+})
 
     ace.commands.bindKey("Tab", function(editor) {
         var success = snippetManager.expandWithTab(editor);

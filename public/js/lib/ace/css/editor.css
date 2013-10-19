@@ -4,6 +4,11 @@
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
     font-size: 12px;
     line-height: normal;
+    color: black;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .ace_scroller {
@@ -11,6 +16,7 @@
     overflow: hidden;
     top: 0;
     bottom: 0;
+    background-color: inherit;
 }
 
 .ace_content {
@@ -19,6 +25,28 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     cursor: text;
+}
+
+.ace_dragging, .ace_dragging * {
+    cursor: move !important;
+}
+
+.ace_dragging .ace_scroller:before{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    background: rgba(250, 250, 250, 0.01);
+    z-index: 1000;
+}
+.ace_dragging.ace_dark .ace_scroller:before{
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.ace_selecting, .ace_selecting * {
+    cursor: text !important;
 }
 
 .ace_gutter {
@@ -70,16 +98,28 @@
 .ace_scrollbar {
     position: absolute;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     right: 0;
     top: 0;
     bottom: 0;
+    z-index: 6;
 }
 
 .ace_scrollbar-inner {
     position: absolute;
-    width: 1px;
+    cursor: text;
     left: 0;
+    top: 0;
+}
+
+.ace_scrollbar-h {
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: hidden;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 6;
 }
 
 .ace_print-margin {
@@ -135,7 +175,6 @@
 }
 
 .ace_text-layer {
-    color: black;
     font: inherit !important;
 }
 
@@ -154,6 +193,16 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    border-left: 2px solid
+}
+
+.ace_slim-cursors .ace_cursor {
+    border-left-width: 1px;
+}
+
+.ace_overwrite-cursors .ace_cursor {
+    border-left-width: 0px;
+    border-bottom: 1px solid;
 }
 
 .ace_hidden-cursors .ace_cursor {
@@ -180,7 +229,7 @@
     white-space: nowrap;
 }
 
-.ace_marker-layer .ace_step {
+.ace_marker-layer .ace_step, .ace_marker-layer .ace_stack {
     position: absolute;
     z-index: 3;
 }
@@ -245,10 +294,6 @@
     background-position: center center, top left;
 }
 
-.ace_editor.ace_dragging .ace_content {
-    cursor: move;
-}
-
 .ace_gutter-tooltip {
     background-color: #FFF;
     background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));
@@ -261,7 +306,7 @@
     max-width: 500px;
     padding: 4px;
     position: fixed;
-    z-index: 300;
+    z-index: 999999;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -384,4 +429,17 @@
 
 .ace_italic {
     font-style: italic;
+}
+
+
+.ace_error-marker {
+    background-color: rgba(255, 0, 0,0.2);
+    position: absolute;
+    z-index: 9;
+}
+
+.ace_highlight-marker {
+    background-color: rgba(255, 255, 0,0.2);
+    position: absolute;
+    z-index: 8;
 }
