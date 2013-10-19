@@ -84,8 +84,8 @@ define([
             if(this.openTabs.get(id) === undefined) {
                 this.openTabs.add(fileModel);
                 var li = $('<li title="'+ location +'" data-file-name="'+fileName+'"'+
-                    'class="tab-link active" id="' + id + '_tab"><span>' + fileName + '</span>' +
-                    '<span class="close-tab" style="float:right; font-weight:bold;">x</span>'+
+                    'class="tab-link active" id="' + id + '_tab"><span class="tab-file-name">' + fileName + '</span>' +
+                    '<span class="close-tab tab-file-close" style="float:right; font-weight:bold;">x</span>'+
                     '</li>'); 
                 this.$el.append(li);               
             } else {
