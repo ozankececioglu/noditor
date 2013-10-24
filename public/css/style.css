@@ -7,7 +7,7 @@
   margin-left: -250px;
   left: 250px;
   width: 250px;
-  background: #000;
+  background: #e5e5e5;
   position: fixed;
   height: 100%;
   overflow-y: auto;
@@ -52,8 +52,9 @@
 
 .sidebar-nav > .sidebar-brand {
   height: 65px;
-  line-height: 40px;
+  line-height: 15px;
   font-size: 18px;
+  margin-top: 10px;
 }
 
 .sidebar-nav > .sidebar-brand a {
@@ -233,7 +234,7 @@
 #folder-tree {
     height: 100%;
     overflow-y: auto;
-    color: #ccc;
+    /*color: #ccc;*/
     /*margin-top: 10px;*/
     /*font-size: 16px;*/
 }
@@ -248,7 +249,7 @@
 }
 
 .name-info:hover{
-    color: #EEE;
+    /*color: #EEE;*/
     cursor: pointer;
     /*background: #333;*/
 }
@@ -263,6 +264,7 @@
     margin: 0;
     padding: 0;
     background: #303030;
+    height: 24px;
     /*margin-top: 12px;
     margin-bottom: 1px;
     border-bottom: 2px solid #555; */
@@ -303,7 +305,7 @@
     border-top-right-radius: 20px 60px;
     border-top-left-radius: 20px 60px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, .9);
-    margin-top: 7px;
+    margin-top: 3px;
     width: auto;
 }
 
@@ -317,6 +319,7 @@
     display: block;
     float: left;
     width:140px;
+    line-height: 21px;
 }
 #editor-tabs li span.close-tab{
     display: block;
@@ -353,14 +356,17 @@
 span#settings {
     position: absolute;
     display: block;
-    top: 5px;
-    left: 212px;
+    /*top: 5px;*/
+    left: 251px;
     color: white;
     z-index: 1234;
     border: 2px solid #303030;
     padding: 2px;
     background: #000;
-    cursor: pointer;    
+    cursor: pointer;   
+    bottom: 0;  
+    line-height: 12px;
+    font-size: 12px; 
 }
 
 a#connect-modal {

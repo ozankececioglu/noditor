@@ -474,8 +474,8 @@ define(function(require, exports, module) {
         container.style.height = document.documentElement.clientHeight - consoleHeight + 'px';
         env.split.resize();
 
-        console.log("window resize", width);
-        consoleEl.style.width = width - 250  + "px";
+        console.log("window resizen ne la", width);
+        consoleEl.style.width = (width - 300)  + "px";
 
         //var editMenu = document.getElementById("menu-toggle");
         //editMenu.style.height = document.documentElement.clientHeight - consoleHeight + "px";
